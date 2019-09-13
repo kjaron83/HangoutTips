@@ -14,6 +14,7 @@
 		<org.slf4j-version>1.7.5</org.slf4j-version>
 		<com.fasterxml.jackson.core-version>2.9.9.3</com.fasterxml.jackson.core-version>
 		<hibernate.version>5.4.2.Final</hibernate.version>
+		<google-maps.version>0.9.4</google-maps.version>
 	</properties>
 	<dependencies>
 		<!-- Spring -->
@@ -84,7 +85,19 @@
 		    <groupId>com.fasterxml.jackson.core</groupId>
 		    <artifactId>jackson-databind</artifactId>
 		    <version>${com.fasterxml.jackson.core-version}</version>
-		</dependency>		
+		</dependency>
+		
+		<!-- Google Maps -->
+		<dependency>
+		  <groupId>com.google.maps</groupId>
+		  <artifactId>google-maps-services</artifactId>
+			<version>${google-maps.version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.slf4j</groupId>
+		  <artifactId>slf4j-simple</artifactId>
+		  <version>1.7.25</version>
+		</dependency>
 		
 		<!-- Logging -->
 		<dependency>
