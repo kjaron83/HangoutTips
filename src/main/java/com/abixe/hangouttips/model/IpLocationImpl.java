@@ -2,7 +2,7 @@ package com.abixe.hangouttips.model;
 
 import org.springframework.lang.Nullable;
 
-public abstract class LocationImpl implements Location {
+public abstract class IpLocationImpl implements IpLocation {
 
 	private long id;
 

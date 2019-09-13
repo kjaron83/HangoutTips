@@ -17,7 +17,7 @@ import org.springframework.lang.Nullable;
 
 @Entity
 @Table(name="ip2location_db11_ipv6")
-public class Ipv6Location extends LocationImpl {
+public class Ipv6Location extends IpLocationImpl {
 
 	private BigDecimal ipFrom;
 	private BigDecimal ipTo;
@@ -118,6 +118,7 @@ public class Ipv6Location extends LocationImpl {
 		}
 	}	
 	
+	@NonNull
 	@Override
 	public String toString() {
 		return "[" + getId() + "] " + getZipCode() + ". " + getCountryName() + ", " + getCityName();

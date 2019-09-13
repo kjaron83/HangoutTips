@@ -2,7 +2,7 @@ package com.abixe.hangouttips.model;
 
 import org.springframework.lang.Nullable;
 
-public interface Location {
+public interface IpLocation extends Coordinate {
 
 	@Nullable
 	public String getCountryCode();
@@ -15,12 +15,6 @@ public interface Location {
 
 	@Nullable
 	public String getCityName();
-
-	@Nullable
-	public Double getLatitude(); 
-
-	@Nullable
-	public Double getLongitude();
 
 	@Nullable
 	public String getZipCode();
