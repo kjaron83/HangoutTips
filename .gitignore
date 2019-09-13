@@ -2,4 +2,4 @@
 .project
 .settings/
 target/
-src/main/resources/database.properties
+src/main/resources/main.properties

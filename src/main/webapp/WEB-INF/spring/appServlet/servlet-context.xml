@@ -2,10 +2,12 @@
 <beans:beans xmlns="http://www.springframework.org/schema/mvc"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:task="http://www.springframework.org/schema/task"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd">
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing 
 		infrastructure -->
@@ -25,7 +27,7 @@
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
 	
-	<context:property-placeholder location="classpath:database.properties"/>
+	<context:property-placeholder location="classpath:main.properties"/>
 
 	<beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
 		destroy-method="close">
@@ -43,12 +45,13 @@
 			<beans:list>
 				<beans:value>com.abixe.hangouttips.model.Ipv4Location</beans:value>
 				<beans:value>com.abixe.hangouttips.model.Ipv6Location</beans:value>
+				<beans:value>com.abixe.hangouttips.model.Place</beans:value>
+				<beans:value>com.abixe.hangouttips.model.Location</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
 			<beans:props>
-				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect
-				</beans:prop>
+				<beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</beans:prop>
 				<beans:prop key="hibernate.show_sql">true</beans:prop>
 			</beans:props>
 		</beans:property>
@@ -60,10 +63,27 @@
 	<beans:bean id="ipv6LocationDAO" class="com.abixe.hangouttips.dao.Ipv6LocationDAOImpl">
 		<beans:property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="locationService" class="com.abixe.hangouttips.service.LocationServiceImpl">
+	<beans:bean id="ipLocationService" class="com.abixe.hangouttips.service.IpLocationServiceImpl">
 		<beans:property name="ipv4LocationDAO" ref="ipv4LocationDAO"></beans:property>
 		<beans:property name="ipv6LocationDAO" ref="ipv6LocationDAO"></beans:property>
 	</beans:bean>
+	
+	<beans:bean id="locationDAO" class="com.abixe.hangouttips.dao.LocationDAOImpl">
+		<beans:property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
+	</beans:bean>
+	<beans:bean id="locationService" class="com.abixe.hangouttips.service.LocationServiceImpl">
+		<beans:property name="locationDAO" ref="locationDAO"></beans:property>
+	</beans:bean>
+	
+	<beans:bean id="placeDAO" class="com.abixe.hangouttips.dao.PlaceDAOImpl">
+		<beans:property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
+	</beans:bean>
+
+	<beans:bean id="placeApiService" class="com.abixe.hangouttips.service.PlaceApiServiceImpl">
+		<beans:property name="locationDAO" ref="locationDAO"></beans:property>
+		<beans:property name="placeDAO" ref="placeDAO"></beans:property>
+	</beans:bean>
+
 	<context:component-scan base-package="com.abixe.hangouttips" />
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>
@@ -71,5 +91,8 @@
 	<beans:bean id="transactionManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
 		<beans:property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory" />
 	</beans:bean>
-
+	
+	<task:executor id="myexecutor" pool-size="5"  />
+	<task:annotation-driven executor="myexecutor"/>
+     
 </beans:beans>
