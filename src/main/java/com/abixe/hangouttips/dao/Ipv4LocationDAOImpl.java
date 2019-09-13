@@ -25,12 +25,12 @@ public class Ipv4LocationDAOImpl implements Ipv4LocationDAO {
 	@Override
 	public Ipv4Location get(long id) {
 		Session session = sessionFactory.getCurrentSession();		
-		Ipv4Location location = (Ipv4Location) session.get(Ipv4Location.class, id);
+		Ipv4Location location = session.get(Ipv4Location.class, id);
 		if ( logger.isInfoEnabled() ) {
 			if ( location == null )
 				logger.info("Ipv4Location was not found by id: " + id);
 			else
-				logger.info("Ipv4Location loaded successfully, Ipv4Location details = " + location);
+				logger.info("Ipv4Location loaded successfully: " + location);		
 		}
 		return location;
 	}
@@ -50,6 +50,8 @@ public class Ipv4LocationDAOImpl implements Ipv4LocationDAO {
 			Long id = (Long) session
 					.createQuery("SELECT l.id FROM Ipv4Location l WHERE ?1 BETWEEN l.ipFrom AND l.ipTo")
 					.setParameter(1, ip)
+					.setFirstResult(0)
+					.setMaxResults(1)
 					.getSingleResult();
 			return get(id);			
 		}

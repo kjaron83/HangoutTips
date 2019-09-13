@@ -27,12 +27,12 @@ public class Ipv6LocationDAOImpl implements Ipv6LocationDAO {
 	@Override
 	public Ipv6Location get(long id) {
 		Session session = sessionFactory.getCurrentSession();		
-		Ipv6Location location = (Ipv6Location) session.get(Ipv6Location.class, id);
+		Ipv6Location location = session.get(Ipv6Location.class, id);
 		if ( logger.isInfoEnabled() ) {
 			if ( location == null )
 				logger.info("Ipv6Location was not found by id: " + id);
 			else
-				logger.info("Ipv6Location loaded successfully, Ipv6Location details = " + location);
+				logger.info("Ipv6Location loaded successfully: " + location);		
 		}
 		return location;
 	}
@@ -52,6 +52,8 @@ public class Ipv6LocationDAOImpl implements Ipv6LocationDAO {
 			Long id = (Long) session
 					.createQuery("SELECT l.id FROM Ipv6Location l WHERE ?1 BETWEEN l.ipFrom AND l.ipTo")
 					.setParameter(1, ip)
+					.setFirstResult(0)
+					.setMaxResults(1)
 					.getSingleResult();
 			return get(id);			
 		}
