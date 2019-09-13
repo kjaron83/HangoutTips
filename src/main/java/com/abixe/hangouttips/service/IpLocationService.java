@@ -5,21 +5,21 @@ import java.math.BigDecimal;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
-import com.abixe.hangouttips.model.Location;
+import com.abixe.hangouttips.model.IpLocation;
 
-public interface LocationService {
+public interface IpLocationService {
 
 	@Nullable
-	public Location get(@NonNull Generation generation, long id);
+	public IpLocation get(@NonNull Generation generation, long id);
 	
 	@Nullable
-	public Location getLocation(@NonNull String ip);
+	public IpLocation getLocation(@NonNull String ip);
 	
 	@Nullable
-	public Location getLocation(@NonNull Long ip);
+	public IpLocation getLocation(@NonNull Long ip);
 	
 	@Nullable
-	public Location getLocation(@NonNull BigDecimal ip);
+	public IpLocation getLocation(@NonNull BigDecimal ip);
 	
 	public enum Generation {
 		IPV4("."),

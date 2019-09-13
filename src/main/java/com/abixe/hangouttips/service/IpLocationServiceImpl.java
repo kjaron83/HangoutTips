@@ -8,9 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.abixe.hangouttips.dao.Ipv4LocationDAO;
 import com.abixe.hangouttips.dao.Ipv6LocationDAO;
-import com.abixe.hangouttips.model.Location;
+import com.abixe.hangouttips.model.IpLocation;
 
-public class LocationServiceImpl implements LocationService {
+public class IpLocationServiceImpl implements IpLocationService {
 
 	private Ipv4LocationDAO ipv4LocationDAO;
 	private Ipv6LocationDAO ipv6LocationDAO;
@@ -26,7 +26,7 @@ public class LocationServiceImpl implements LocationService {
 	@Nullable
 	@Override
 	@Transactional	
-	public Location get(@NonNull Generation generation, long id) {
+	public IpLocation get(@NonNull Generation generation, long id) {
 		if ( generation == Generation.IPV4 )
 			return ipv4LocationDAO.get(id);
 		if ( generation == Generation.IPV6 )
@@ -38,7 +38,7 @@ public class LocationServiceImpl implements LocationService {
 	@Nullable
 	@Override
 	@Transactional	
-	public Location getLocation(@NonNull String ip) {
+	public IpLocation getLocation(@NonNull String ip) {
 		if ( ip.contains(Generation.IPV4.separator) )
 			return ipv4LocationDAO.getLocation(ip);
 		if ( ip.contains(Generation.IPV6.separator) )
@@ -50,14 +50,14 @@ public class LocationServiceImpl implements LocationService {
 	@Nullable
 	@Override
 	@Transactional	
-	public Location getLocation(@NonNull Long ip) {
+	public IpLocation getLocation(@NonNull Long ip) {
 		return ipv4LocationDAO.getLocation(ip);
 	}
 
 	@Nullable
 	@Override
 	@Transactional	
-	public Location getLocation(@NonNull BigDecimal ip) {
+	public IpLocation getLocation(@NonNull BigDecimal ip) {
 		return ipv6LocationDAO.getLocation(ip);
 	}
 
