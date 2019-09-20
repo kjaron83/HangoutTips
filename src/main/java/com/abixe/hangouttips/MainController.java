@@ -1,5 +1,7 @@
 package com.abixe.hangouttips;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.abixe.hangouttips.model.IpLocation;
 import com.abixe.hangouttips.model.Location;
+import com.abixe.hangouttips.model.Place;
 import com.abixe.hangouttips.service.IpLocationService;
 import com.abixe.hangouttips.service.LocationService;
 import com.abixe.hangouttips.service.PlaceApiService;
@@ -59,6 +62,10 @@ public class MainController extends DefaultController {
 			Location location = locationService.get(ipLocation);
 			info.put("location", location.toString());
 			
+			ArrayList<Place> places = new ArrayList<>(location.getPlaces());
+			Collections.sort(places, Place.RATING_COMPARATOR);
+			info.put("places", places);
+			
 			if ( placeApiService.isExpired(location) )
 				placeApiService.update(location);
 		}
@@ -72,5 +79,5 @@ public class MainController extends DefaultController {
 		model.addAttribute("content", "@policy");		
 		return "index";		
 	}	
-
+	
 }
