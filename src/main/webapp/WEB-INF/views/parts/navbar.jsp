@@ -1,18 +1,42 @@
     <%@ page pageEncoding="UTF-8" %>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
-      <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="/">Hangout Tips</a>
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
-          Menu
-          <i class="fa fa-bars"></i>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarResponsive">
-          <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="/privacy-policy/">Privacy Policy</a>
-            </li>
-          </ul>
-        </div>                
-      </div>
-    </nav>
+    <!-- main-content -->
+    <div class="main-content" id="home">
+     
+        <!-- header -->
+        <header class="header">
+            <div class="container">
+                <!-- nav -->
+                <nav class="py-3">
+                    <div id="logo">
+                        <h1><a class="navbar-brand" href="/">Hangout.Tips</a></h1>
+                    </div>
+
+                    <label for="drop" class="toggle">Menu</label>
+                    <input type="checkbox" id="drop" />
+                    <ul class="menu mt-2">
+                        <li class="active"><a href="/">Home</a></li>
+                        <li><a href="https://github.com/kjaron83/HangoutTips" target="_blank">GitHub</a></li>
+                        <li><a href="/privacy-policy/">Privacy Policy</a></li>                      
+                    </ul>
+
+                </nav>
+                <!-- //nav -->
+            </div>
+        </header>
+        <!-- //header -->
+        <!-- banner -->
+        <section class="banner">
+            <div class="container">
+                <div class="row banner-grids">
+                    <div class="col-lg-6 banner-info-w3ls">
+                        <h2>Do you want to hang out?</h2>
+                        <h3 class="mb-3">Get together with your friends and have fun.</h3>
+                        <p class="mb-4">Here are the best places nearby your location.</p>
+                        <a href="#list" class="btn">More</a>
+                    </div>                   
+                </div>
+            </div>
+        </section>
+        <!-- //banner -->
+    </div>
+    <!--/main-content -->    
