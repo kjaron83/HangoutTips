@@ -61,6 +61,27 @@ public class LocationDAOImpl implements LocationDAO {
 		return null;
 	}
 
+	@Nullable
+	@Override
+	public Location get(@NonNull String path) {
+		Session session = sessionFactory.getCurrentSession();
+
+		try {
+			Long id = (Long) session
+					.createQuery("SELECT l.id FROM Location l WHERE l.path = ?1")
+					.setParameter(1, path)
+					.setFirstResult(0)
+					.setMaxResults(1)
+					.getSingleResult();
+			return get(id);			
+		}
+		catch (NoResultException e) {
+			logger.info("Location was not found by path: " + path);		
+		}
+		
+		return null;
+	}
+
 	@Override
 	public void add(@NonNull Location location) {
 		Session session = sessionFactory.getCurrentSession();

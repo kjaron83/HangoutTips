@@ -26,6 +26,9 @@ public class Location implements Coordinate {
 	private long id;
 	private Double latitude; 
 	private Double longitude;
+	private String countryName;
+	private String cityName;	
+	private String path;	
 	private Date updated;
 	
 	private Set<Place> places = new HashSet<>();
@@ -60,7 +63,38 @@ public class Location implements Coordinate {
 	public void setLongitude(@Nullable Double longitude) {
 		this.longitude = longitude;
 	}
+
 	
+	@Column(name = "country_name")
+	@Nullable	
+	public String getCountryName() {
+		return countryName;
+	}
+
+	public void setCountryName(String countryName) {
+		this.countryName = countryName;
+	}
+
+	@Column(name = "city_name")
+	@Nullable
+	public String getCityName() {
+		return cityName;
+	}
+
+	public void setCityName(String cityName) {
+		this.cityName = cityName;
+	}
+
+	@Column(name = "path")
+	@Nullable
+	public String getPath() {
+		return path;
+	}
+
+	public void setPath(String path) {
+		this.path = path;
+	}
+
 	@Column
 	@Nullable
 	public Date getUpdated() {

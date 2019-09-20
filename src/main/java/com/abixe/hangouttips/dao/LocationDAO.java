@@ -14,6 +14,9 @@ public interface LocationDAO {
 	@Nullable
 	public Location get(@NonNull Coordinate coordinate);
 	
+	@Nullable
+	public Location get(@NonNull String path);
+
 	public void add(@NonNull Location location);
 	
 	public void update(@NonNull Location location);
