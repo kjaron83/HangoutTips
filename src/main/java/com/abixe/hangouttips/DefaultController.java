@@ -7,7 +7,7 @@ import org.springframework.lang.Nullable;
 
 public abstract class DefaultController {
 
-	private static final String ROOT = "100pushups.abixe.com"; 	
+	private static final String ROOT = "hangout.tips"; 	
 	
 	@Autowired
 	private HttpServletRequest request;	
