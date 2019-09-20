@@ -205,6 +205,17 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 		if ( result.photos != null && result.photos.length > 0 ) {
 			String reference = result.photos[0].photoReference;
 			if ( !reference.equals(place.getPhotoReference()) ) {
+				String oldPhoto = place.getPhoto();
+				if ( oldPhoto != null ) {
+					logger.info("Removing old photo: " + oldPhoto);
+					if ( new File(placePhotoPath + File.separator + oldPhoto).delete() ) {
+						logger.info("Removing succeed.");
+						place.setPhoto(null);
+					}
+					else
+						logger.warn("Removing failed!");
+				}
+				
 				place.setPhotoReference(reference);
 				
 				logger.info("Downloading photo reference: " + reference);
