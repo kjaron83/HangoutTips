@@ -1,9 +1,14 @@
 // JavaScript Document
 
-addEventListener("load", function() {
-	setTimeout(hideURLbar, 0);
-}, false);
-
-function hideURLbar() {
-	window.scrollTo(0, 1);
+function checkLocationIsLoaded(path) {
+	$.ajax({
+		"url": "/api/" + path,
+		"dataType": "json",
+	    "success": function (data) {
+	        if ( data["success"] )
+	        	location = "/" + path;
+	        else
+	        	window.setTimeout(function() { checkLocationIsLoaded(path); }, 2000);
+	    },		
+	});	
 }

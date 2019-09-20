@@ -20,5 +20,9 @@
     <link href="/resources/css/style.css" rel="stylesheet">
     
     <script type="text/javascript" src="/resources/js/script.js"></script>
+    
+    <!-- Bootstrap core JavaScript -->
+    <script src="/resources/vendor/jquery/jquery.min.js"></script>
+    <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>    
 
   </head>

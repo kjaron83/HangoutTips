@@ -16,6 +16,9 @@
     <c:when test="${content=='@home'}">
 	  <%@include file="parts/home/content.jsp"  %>    
     </c:when>    
+    <c:when test="${content=='@places'}">
+	  <%@include file="parts/places/content.jsp" %>    
+    </c:when>    
     <c:when test="${content=='@policy'}">
 	  <%@include file="parts/policy/content.jsp" %>    
     </c:when>    
