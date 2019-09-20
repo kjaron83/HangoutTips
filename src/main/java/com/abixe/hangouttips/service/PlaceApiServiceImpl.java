@@ -64,9 +64,6 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 	@Value("${place.photo.path}")
 	private String placePhotoPath;	
 
-	@Value("${place.photo.symlink}")
-	private String placePhotoSymlink;	
-
 	@Value("${place.photo.maxheigth}")
 	private int placePhotoMaxheight;	
 
@@ -217,13 +214,6 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 				photoRequest.maxWidth(placePhotoMaxwidth);
 				ImageResult image = photoRequest.await();
 				logger.info("Download finished. Content-type: " + image.contentType);
-				
-				File folder = new File(placePhotoPath);
-				File symlink = new File(placePhotoSymlink);				
-				if ( !symlink.exists() ) {
-					logger.info("Creating symlink: " + placePhotoSymlink + " => " + placePhotoPath);					
-					Files.createSymbolicLink(symlink.toPath(), folder.toPath());
-					}
 				
 				String fileName = String.format("%1$10s", Math.abs(reference.hashCode())).replace(' ', '0') + "-" + new Date().getTime() + ".jpg";
 				String folderName = fileName.substring(0, 3) + File.separator + fileName.substring(3, 6) + File.separator + fileName.substring(6, 9);
