@@ -61,6 +61,9 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 	@Value("${place.update}")
 	private int placeUpdate;	
 	
+	@Value("${place.rating.minimum}")
+	private double ratingMinimum;	
+
 	@Value("${place.photo.path}")
 	private String placePhotoPath;	
 
@@ -128,7 +131,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 		Set<Place> places = location.getPlaces();
 		Place place;
 		for ( int i = 0; i < response.results.length; i++ ) {
-			if ( !isTypeOf(response.results[i], PlaceType.LODGING, PlaceType.SPA) ) {
+			if ( !isTypeOf(response.results[i], PlaceType.LODGING, PlaceType.SPA) && response.results[i].rating >= ratingMinimum ) {
 				place = placeDAO.get(response.results[i].placeId);
 				if ( place == null || isExpired(place) ) 
 					place = convert(response.results[i], place);
