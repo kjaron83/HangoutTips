@@ -1,5 +1,6 @@
 package com.abixe.hangouttips.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,8 @@ import org.springframework.lang.Nullable;
 @Entity
 @Table(name="place")
 public class Place {
+	
+	public static final Comparator<Place> RATING_COMPARATOR = new RatingComparator();
 	
 	private long id;
 	private String placeId;
@@ -179,5 +182,18 @@ public class Place {
 		
 		return super.hashCode();
 	}
+	
+	private static class RatingComparator implements Comparator<Place> {
+
+		@Override
+		public int compare(@NonNull Place o1, @NonNull Place o2) {
+			int result = Double.compare(o1.getRating(), o2.getRating()) * -1;
+			if ( result == 0 )
+				result = o1.getName().compareTo(o2.getName());
+			return result;
+		}
+		
+	}
+	
 	
 }
