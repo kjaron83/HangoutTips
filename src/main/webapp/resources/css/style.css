@@ -522,8 +522,9 @@ section.banner {
 /* image layers effect */
 
 .banner-info-w3ls {
-    padding-right: 3em;
+    padding: 3em;
     margin-top: 4em;
+    background-color: #000;
 }
 
 
@@ -1555,7 +1556,6 @@ a.move-top span {
     }
     .banner-info-w3ls {
         margin-top: 0em;
-        padding-right: 3em;
     }
     .sign-info h3 {
         font-size: 1.6em;
@@ -1574,7 +1574,6 @@ a.move-top span {
 @media(max-width:992px) {
     .banner-info-w3ls {
         margin-top: 0em;
-        padding-right: 0;
         margin: 2em 0;
     }
     .navbar-light .navbar-nav .nav-link,
@@ -1877,7 +1876,6 @@ a.move-top span {
 
     .banner-info-w3ls {
         margin-top: 0em;
-        padding-right: 15px;
         margin: 0em 0 2em 0;
     }
     .count-title {
@@ -1920,7 +1918,6 @@ a.move-top span {
     }
     .banner-info-w3ls {
         margin-top: 0em;
-        padding-right: 15px;
         margin: 0em 0 0em 0;
     }
     .banner-info-w3ls h3 {
@@ -1955,7 +1952,7 @@ a.move-top span {
     margin-top: 0em;
 }
 .banner-info-w3ls {
-    padding: 0;
+    padding: 1em;
 }
 .banner-info-w3ls h3 {
     font-size: 1.3em;
