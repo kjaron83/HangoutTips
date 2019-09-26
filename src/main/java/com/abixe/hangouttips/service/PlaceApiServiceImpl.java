@@ -94,7 +94,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 			findNearBy(location, latLng, PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT, PlaceType.NIGHT_CLUB);
 			locationDAO.update(location);
 			for ( Place place : location.getPlaces() ) {
-				if ( isExpired(location) ) {
+				if ( isExpired(place) ) {
 					update(place);
 		    		Thread.sleep(1000);					
 				}
