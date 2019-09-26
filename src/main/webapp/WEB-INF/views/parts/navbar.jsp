@@ -3,7 +3,7 @@
     <div class="main-content" id="home">
      
         <!-- header -->
-        <header class="header">
+        <header class="header fixed-top">
             <div class="container">
                 <!-- nav -->
                 <nav class="py-3">

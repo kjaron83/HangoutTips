@@ -151,6 +151,7 @@ header {
     width: 100%;
     -webkit-box-shadow: 0 0.15rem 0.1rem 0 rgba(0, 0, 0, 0.05);
     box-shadow: 0 0.15rem 0.1rem 0 rgba(0, 0, 0, 0.05);
+    background: rgba(16, 16, 16, 0.85);
 }
 
 .toggle,
@@ -292,8 +293,27 @@ li > a:only-child:after {
 /* Media Queries
 --------------------------------------------- */
 
-@media all and (max-width: 768px) {
+@media all and (min-width:568px) {
+	.card-columns {
+		-webkit-column-count: 2;
+		column-count: 2;
+	}	
+}
+@media all and (min-width: 1024px) {
+	.card-columns {
+		-webkit-column-count: 3;
+		column-count: 3;
+	}	
+}
+@media all and (min-width: 1280px) {
+	.card-columns {
+		-webkit-column-count: 4;
+		column-count: 4;
+	}	
+}
 
+@media all and (max-width: 768px) {
+	
     #logo {
         display: block;
         padding: 0;
@@ -516,7 +536,7 @@ a.contact:hover {
 }
 
 section.banner {
-    padding: 4em 0 4em 0;
+    padding: 9em 0 4em 0;
 }
 
 /* image layers effect */
@@ -524,7 +544,7 @@ section.banner {
 .banner-info-w3ls {
     padding: 3em;
     margin-top: 4em;
-    background-color: #000;
+    background-color: rgba(16, 16, 16, 0.85);
 }
 
 
@@ -809,8 +829,6 @@ ul.tic-info li span {
 
 .detail ul li {
     list-style: none;
-    width: 44%;
-    float: left;
     font-weight: 400;
     font-size: 13px;
     color: #bbb5b5;
@@ -818,7 +836,6 @@ ul.tic-info li span {
 }
 
 .detail ul li span {
-    color: #fff;
 }
 
 .detail ul li:hover span,
@@ -834,13 +851,9 @@ ul.tic-info li span {
 }
 
 .footer-properties span.rating {
-    float: right !important;
-    font-size: 13px;
-    color: #fff;
-}
-
-.footer-properties span {
-    margin-right: 5px;
+    font-size: 1.5rem;
+    color: #ef9632;
+    display: block;
 }
 
 ul.facilities-list span {
@@ -849,8 +862,6 @@ ul.facilities-list span {
 
 .footer-properties {
     border-top: 1px solid #3d558e;
-    padding-top: 0.7em;
-    margin-top: 1em;
 }
 
 /*--//info--*/
@@ -1741,7 +1752,7 @@ a.move-top span {
 
 @media(max-width:768px) {
     section.banner {
-        padding: 3em 0 3em 0;
+        padding: 7em 0 3em 0;
     }
 }
 
@@ -1966,3 +1977,4 @@ a.move-top span {
 }
 
 /*--//responsive--*/
+
