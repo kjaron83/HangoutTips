@@ -3,11 +3,13 @@ package com.abixe.hangouttips;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.lang.Nullable;
 
 public abstract class DefaultController {
 
-	private static final String ROOT = "hangout.tips"; 	
+	@Value("${root}")
+	private String root;
 	
 	@Autowired
 	private HttpServletRequest request;	
@@ -19,7 +21,7 @@ public abstract class DefaultController {
 		return new StringBuilder("redirect:")
 				.append(request.isSecure() ? "https" : "http")
 				.append("://")
-				.append(ROOT)
+				.append(root)
 				.append(to)
 				.toString();
 	}
