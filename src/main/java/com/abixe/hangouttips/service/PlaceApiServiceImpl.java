@@ -57,9 +57,15 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 	
 	@Value("${location.update}")
 	private int locationUpdate;	
+	
+	@Value("${location.fetch.sleep}")
+	private int locationSleep;		
 
 	@Value("${place.update}")
-	private int placeUpdate;	
+	private int placeUpdate;
+	
+	@Value("${place.fetch.sleep}")
+	private int placeSleep;	
 	
 	@Value("${place.rating.minimum}")
 	private double ratingMinimum;	
@@ -96,7 +102,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 			for ( Place place : location.getPlaces() ) {
 				if ( isExpired(place) ) {
 					update(place);
-		    		Thread.sleep(1000);					
+		    		Thread.sleep(placeSleep);					
 				}
 			}
 		}
@@ -112,7 +118,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
     private void findNearBy(@NonNull Location location, @NonNull LatLng latLng, @NonNull PlaceType... placeTypes) throws ApiException, InterruptedException, IOException {
     	for ( int i = 0; i < placeTypes.length; i++ ) {
     		findNearBy(location, latLng, placeTypes[i]);
-    		Thread.sleep(1000);
+    		Thread.sleep(locationSleep);
     	}
     }		
 
