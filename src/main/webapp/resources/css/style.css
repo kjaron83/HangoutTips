@@ -553,6 +553,14 @@ section.banner {
 
 /*-- //banner --*/
 
+/*-- policy --*/
+
+section.policy {
+    margin-top: 7em;
+}
+
+/*-- //policy --*/
+
 /*-- popup --*/
 
 .pop-overlay {

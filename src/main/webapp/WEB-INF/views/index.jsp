@@ -12,6 +12,9 @@
   <body id="page-top">
 <%@include file="parts/navbar.jsp" %>   
 <c:if test="${!empty content}">
+  <c:if test="${content!='@policy'}">
+    <%@include file="parts/banner.jsp"  %>    
+  </c:if>
   <c:choose>
     <c:when test="${content=='@home'}">
 	  <%@include file="parts/home/content.jsp"  %>    
