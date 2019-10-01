@@ -32,6 +32,7 @@
                         </div>
                         <div class="footer-text">
                             <p>&copy; 2019 All Rights Reserved.</p>
+                            <p>The cover photo was made by <a href="https://unsplash.com/@danielcgold?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" rel="nofollow">Dan Gold</a>.</p>
                         </div>
                     </div>
                 </div>
