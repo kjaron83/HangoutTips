@@ -11,111 +11,111 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 @Entity
-@Table(name="ip2location_db11")
+@Table(name = "ip2location_db11")
 public class Ipv4Location extends IpLocationImpl {
 
-	private Long ipFrom;
-	private Long ipTo;
-	
-	@Id
-	@Column(name = "TABLE_ID")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Override
-	public long getId() {
-		return super.getId();
-	}
-	
-	@Column(name = "ip_from", columnDefinition = "int(10) UNSIGNED")
-	@Nullable
-	public Long getIpFrom() {
-		return ipFrom;
-	}
-	
-	public void setIpFrom(@Nullable Long ipFrom) {
-		this.ipFrom = ipFrom;
-	}
-	
-	@Column(name = "ip_to", columnDefinition = "int(10) UNSIGNED")
-	@Nullable
-	public Long getIpTo() {
-		return ipTo;
-	}
-	
-	@Nullable
-	public void setIpTo(@Nullable Long ipTo) {
-		this.ipTo = ipTo;
-	}
+    private Long ipFrom;
+    private Long ipTo;
 
-	@Column(name = "country_code")
-	@Nullable
-	@Override
-	public String getCountryCode() {
-		return super.getCountryCode();
-	}
+    @Id
+    @Column(name = "TABLE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Override
+    public long getId() {
+        return super.getId();
+    }
 
-	@Column(name = "country_name")
-	@Nullable
-	@Override
-	public String getCountryName() {
-		return super.getCountryName();
-	}
+    @Column(name = "ip_from", columnDefinition = "int(10) UNSIGNED")
+    @Nullable
+    public Long getIpFrom() {
+        return ipFrom;
+    }
 
-	@Column(name = "region_name")
-	@Nullable
-	@Override
-	public String getRegionName() {
-		return super.getRegionName();
-	}
+    public void setIpFrom(@Nullable Long ipFrom) {
+        this.ipFrom = ipFrom;
+    }
 
-	@Column(name = "city_name")
-	@Nullable
-	@Override
-	public String getCityName() {
-		return super.getCityName();
-	}
+    @Column(name = "ip_to", columnDefinition = "int(10) UNSIGNED")
+    @Nullable
+    public Long getIpTo() {
+        return ipTo;
+    }
 
-	@Column(name = "latitude")
-	@Nullable
-	@Override
-	public Double getLatitude() {
-		return super.getLatitude();
-	}
+    @Nullable
+    public void setIpTo(@Nullable Long ipTo) {
+        this.ipTo = ipTo;
+    }
 
-	@Column(name = "longitude")
-	@Nullable
-	@Override
-	public Double getLongitude() {
-		return super.getLongitude();
-	}
+    @Column(name = "country_code")
+    @Nullable
+    @Override
+    public String getCountryCode() {
+        return super.getCountryCode();
+    }
 
-	@Column(name = "zip_code")
-	@Nullable
-	@Override
-	public String getZipCode() {
-		return super.getZipCode();
-	}
+    @Column(name = "country_name")
+    @Nullable
+    @Override
+    public String getCountryName() {
+        return super.getCountryName();
+    }
 
-	@Column(name = "time_zone")
-	@Nullable
-	@Override
-	public String getTimeZone() {
-		return super.getTimeZone();
-	}
-	
-	public static long convert(@NonNull String ip) {
-		String[] parts = ip.split("\\.");
-		
-		long result = 0;  
-		for ( int i = 0; i < parts.length; i++ )  
-		    result = result << 8 | (Integer.parseInt(parts[i]) & 0xFF);
-		
-		return result;
-	}	
-	
-	@NonNull
-	@Override
-	public String toString() {
-		return "[" + getId() + "] " + getZipCode() + ". " + getCountryName() + ", " + getCityName();
-	}
-	
+    @Column(name = "region_name")
+    @Nullable
+    @Override
+    public String getRegionName() {
+        return super.getRegionName();
+    }
+
+    @Column(name = "city_name")
+    @Nullable
+    @Override
+    public String getCityName() {
+        return super.getCityName();
+    }
+
+    @Column(name = "latitude")
+    @Nullable
+    @Override
+    public Double getLatitude() {
+        return super.getLatitude();
+    }
+
+    @Column(name = "longitude")
+    @Nullable
+    @Override
+    public Double getLongitude() {
+        return super.getLongitude();
+    }
+
+    @Column(name = "zip_code")
+    @Nullable
+    @Override
+    public String getZipCode() {
+        return super.getZipCode();
+    }
+
+    @Column(name = "time_zone")
+    @Nullable
+    @Override
+    public String getTimeZone() {
+        return super.getTimeZone();
+    }
+
+    public static long convert(@NonNull String ip) {
+        String[] parts = ip.split("\\.");
+
+        long result = 0;
+        for ( int i = 0; i < parts.length; i++ )
+            result = result << 8 | ( Integer.parseInt(parts[i]) & 0xFF );
+
+        return result;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "[" + getId() + "] " + getZipCode() + ". " + getCountryName() + ", " + getCityName();
+    }
+
 }

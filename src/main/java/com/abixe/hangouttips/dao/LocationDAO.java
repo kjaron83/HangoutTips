@@ -8,19 +8,19 @@ import com.abixe.hangouttips.model.Coordinate;
 
 public interface LocationDAO {
 
-	@Nullable
-	public Location get(long id);
-	
-	@Nullable
-	public Location get(@NonNull Coordinate coordinate);
-	
-	@Nullable
-	public Location get(@NonNull String path);
+    @Nullable
+    public Location get(long id);
 
-	public void add(@NonNull Location location);
-	
-	public void update(@NonNull Location location);
-	
-	public void remove(@NonNull Location location);
-	
+    @Nullable
+    public Location get(@NonNull Coordinate coordinate);
+
+    @Nullable
+    public Location get(@NonNull String path);
+
+    public void add(@NonNull Location location);
+
+    public void update(@NonNull Location location);
+
+    public void remove(@NonNull Location location);
+
 }

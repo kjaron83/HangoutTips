@@ -17,183 +17,182 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 @Entity
-@Table(name="place")
+@Table(name = "place")
 public class Place {
-	
-	public static final Comparator<Place> RATING_COMPARATOR = new RatingComparator();
-	
-	private long id;
-	private String placeId;
-	private String name;
-	private Double rating;
-	private String address;
-	private String phone;
-	private String website;
-	private String mapUrl;
-	private String photoReference;
-	private String photo;
-	private Date updated;
-	
-    private Set<Location> locations = new HashSet<>();		
-	    
-	@Id
-	@Column(name = "TABLE_ID")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)	
-	public long getId() {
-		return id;
-	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	@Column(name = "place_id")
-	@Nullable
-	public String getPlaceId() {
-		return placeId;
-	}
-	
-	public void setPlaceId(@Nullable String placeId) {
-		this.placeId = placeId;
-	}
-	
-	@Column
-	@Nullable
-	public String getName() {
-		return name;
-	}
-	
-	public void setName(@Nullable String name) {
-		this.name = name;
-	}
-	
-	@Column
-	@Nullable
-	public Double getRating() {
-		return rating;
-	}
-	
-	public void setRating(@Nullable Double rating) {
-		this.rating = rating;
-	}
-	
-	@Column
-	@Nullable
-	public String getAddress() {
-		return address;
-	}
-	
-	public void setAddress(@Nullable String address) {
-		this.address = address;
-	}
-	
-	@Column
-	@Nullable
-	public String getPhone() {
-		return phone;
-	}
-	
-	public void setPhone(@Nullable String phone) {
-		this.phone = phone;
-	}
-	
-	@Column
-	@Nullable
-	public String getWebsite() {
-		return website;
-	}
-	
-	public void setWebsite(@Nullable String website) {
-		this.website = website;
-	}
-	
-	@Column(name = "map_url")
-	@Nullable
-	public String getMapUrl() {
-		return mapUrl;
-	}
-	
-	public void setMapUrl(@Nullable String mapUrl) {
-		this.mapUrl = mapUrl;
-	}
-	
-	@Column(name = "photo_reference")
-	@Nullable
-	public String getPhotoReference() {
-		return photoReference;
-	}
-	
-	public void setPhotoReference(@Nullable String photoReference) {
-		this.photoReference = photoReference;
-	}
-	
-	@Column
-	@Nullable
-	public String getPhoto() {
-		return photo;
-	}
-	
-	public void setPhoto(@Nullable String photo) {
-		this.photo = photo;
-	}
-	
-	@Column
-	@Nullable
-	public Date getUpdated() {
-		return updated;
-	}
-	
-	public void setUpdated(@Nullable Date updated) {
-		this.updated = updated;
-	}
+    public static final Comparator<Place> RATING_COMPARATOR = new RatingComparator();
+
+    private long id;
+    private String placeId;
+    private String name;
+    private Double rating;
+    private String address;
+    private String phone;
+    private String website;
+    private String mapUrl;
+    private String photoReference;
+    private String photo;
+    private Date updated;
+
+    private Set<Location> locations = new HashSet<>();
+
+    @Id
+    @Column(name = "TABLE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    @Column(name = "place_id")
+    @Nullable
+    public String getPlaceId() {
+        return placeId;
+    }
+
+    public void setPlaceId(@Nullable String placeId) {
+        this.placeId = placeId;
+    }
+
+    @Column
+    @Nullable
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@Nullable String name) {
+        this.name = name;
+    }
+
+    @Column
+    @Nullable
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(@Nullable Double rating) {
+        this.rating = rating;
+    }
+
+    @Column
+    @Nullable
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(@Nullable String address) {
+        this.address = address;
+    }
+
+    @Column
+    @Nullable
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(@Nullable String phone) {
+        this.phone = phone;
+    }
+
+    @Column
+    @Nullable
+    public String getWebsite() {
+        return website;
+    }
+
+    public void setWebsite(@Nullable String website) {
+        this.website = website;
+    }
+
+    @Column(name = "map_url")
+    @Nullable
+    public String getMapUrl() {
+        return mapUrl;
+    }
+
+    public void setMapUrl(@Nullable String mapUrl) {
+        this.mapUrl = mapUrl;
+    }
+
+    @Column(name = "photo_reference")
+    @Nullable
+    public String getPhotoReference() {
+        return photoReference;
+    }
+
+    public void setPhotoReference(@Nullable String photoReference) {
+        this.photoReference = photoReference;
+    }
+
+    @Column
+    @Nullable
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(@Nullable String photo) {
+        this.photo = photo;
+    }
+
+    @Column
+    @Nullable
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(@Nullable Date updated) {
+        this.updated = updated;
+    }
 
     @ManyToMany(mappedBy = "places")
-	@NonNull
-	public Set<Location> getLocations() {
-		return locations;
-	}
+    @NonNull
+    public Set<Location> getLocations() {
+        return locations;
+    }
 
-	public void setLocations(@NonNull Set<Location> locations) {
-		this.locations = locations;
-	}	
-		
-	@NonNull
-	@Override
-	public String toString() {
-		return "[" + getId() + "] " + getName() + "(" + getAddress() + ")";		
-	}
-	
-	@Override
-	public boolean equals(@Nullable Object obj) {
-		if ( obj == null || !( obj instanceof Place) )
-			return false;
-		
-		Place other = (Place) obj;
-		if ( id != 0 && other.getId() == id )
-			return true;
-		
-		return other.placeId != null && placeId!= null && other.placeId.equals(placeId);
-	}
-	
-	@Override
-	public int hashCode() {
-		if ( placeId != null )
-			return placeId.hashCode() * 31;
-		
-		return super.hashCode();
-	}
-	
-	private static class RatingComparator implements Comparator<Place> {
+    public void setLocations(@NonNull Set<Location> locations) {
+        this.locations = locations;
+    }
 
-		@Override
-		public int compare(@NonNull Place o1, @NonNull Place o2) {
-			int result = Double.compare(o1.getRating(), o2.getRating()) * -1;
-			if ( result == 0 )
-				result = o1.getName().compareTo(o2.getName());
-			return result;
-		}
-		
-	}
-	
-	
+    @NonNull
+    @Override
+    public String toString() {
+        return "[" + getId() + "] " + getName() + "(" + getAddress() + ")";
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if ( obj == null || ! ( obj instanceof Place ) )
+            return false;
+
+        Place other = (Place) obj;
+        if ( id != 0 && other.getId() == id )
+            return true;
+
+        return other.placeId != null && placeId != null && other.placeId.equals(placeId);
+    }
+
+    @Override
+    public int hashCode() {
+        if ( placeId != null )
+            return placeId.hashCode() * 31;
+
+        return super.hashCode();
+    }
+
+    private static class RatingComparator implements Comparator<Place> {
+
+        @Override
+        public int compare(@NonNull Place o1, @NonNull Place o2) {
+            int result = Double.compare(o1.getRating(), o2.getRating()) * -1;
+            if ( result == 0 )
+                result = o1.getName().compareTo(o2.getName());
+            return result;
+        }
+
+    }
+
 }

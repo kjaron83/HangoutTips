@@ -7,16 +7,16 @@ import com.abixe.hangouttips.model.Place;
 
 public interface PlaceDAO {
 
-	@Nullable
-	public Place get(long id);
-		
-	@Nullable
-	public Place get(@NonNull String placeId);
+    @Nullable
+    public Place get(long id);
 
-	public void add(@NonNull Place place);
-	
-	public void update(@NonNull Place place);
-	
-	public void remove(@NonNull Place place);	
-	
+    @Nullable
+    public Place get(@NonNull String placeId);
+
+    public void add(@NonNull Place place);
+
+    public void update(@NonNull Place place);
+
+    public void remove(@NonNull Place place);
+
 }

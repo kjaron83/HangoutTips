@@ -22,78 +22,78 @@ import com.abixe.hangouttips.service.PlaceApiService;
 
 @Controller
 public class MainController extends DefaultController {
-	
-	private IpLocationService ipLocationService;
-	private LocationService locationService;
-	private PlaceApiService placeApiService;
-	
-	@Autowired()
-	@Qualifier(value = "ipLocationService")
-	public void setIpLocationService(IpLocationService ipLocationService){
-		this.ipLocationService = ipLocationService;
-	}	
-	
-	@Autowired()
-	@Qualifier(value = "locationService")
-	public void setLocationService(LocationService locationService){
-		this.locationService = locationService;
-	}		
 
-	@Autowired()
-	@Qualifier(value = "placeApiService")
-	public void setPlaceApiService(PlaceApiService placeApiService){
-		this.placeApiService = placeApiService;
-	}		
+    private IpLocationService ipLocationService;
+    private LocationService locationService;
+    private PlaceApiService placeApiService;
 
-	@GetMapping(value = "/")
-	public String getHomeContent(Model model, HttpServletRequest request) {
-		model.addAttribute("content", "@home");
-		
-		String ip = request.getRemoteAddr();		
-		IpLocation ipLocation = ipLocationService.getLocation(ip);
-		
-		HashMap<String, Object> info = new HashMap<>();
-		info.put("ip", ip);
-		if ( ipLocation != null ) {
-			Location location = locationService.get(ipLocation);
-			info.put("location", location.getPath());
-			
-			if ( placeApiService.isExpired(location) )
-				placeApiService.update(location);
-		}
-		model.addAttribute("info", info);
-		
-		return "index";		
-	}	
-	
-	@GetMapping(value = "/{country}/{city}")
-	public String getHomeContent(Model model, @PathVariable String country, @PathVariable String city) {
-		model.addAttribute("content", "@places");
-		
-		Location location = locationService.get(country + "/" + city);
-		if ( location == null )
-			return redirect(null);
-		
-		HashMap<String, Object> info = new HashMap<>();
+    @Autowired()
+    @Qualifier(value = "ipLocationService")
+    public void setIpLocationService(IpLocationService ipLocationService) {
+        this.ipLocationService = ipLocationService;
+    }
 
-		info.put("location", location.getPath());
-		
-		ArrayList<Place> places = new ArrayList<>(location.getPlaces());
-		Collections.sort(places, Place.RATING_COMPARATOR);
-		info.put("places", places);
-		
-		if ( placeApiService.isExpired(location) )
-			placeApiService.update(location);
+    @Autowired()
+    @Qualifier(value = "locationService")
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
+    }
 
-		model.addAttribute("info", info);
-		
-		return "index";		
-	}	
+    @Autowired()
+    @Qualifier(value = "placeApiService")
+    public void setPlaceApiService(PlaceApiService placeApiService) {
+        this.placeApiService = placeApiService;
+    }
 
-	@GetMapping(value = "/privacy-policy")
-	public String getPolicyContent(Model model) {
-		model.addAttribute("content", "@policy");		
-		return "index";		
-	}	
-	
+    @GetMapping(value = "/")
+    public String getHomeContent(Model model, HttpServletRequest request) {
+        model.addAttribute("content", "@home");
+
+        String ip = request.getRemoteAddr();
+        IpLocation ipLocation = ipLocationService.getLocation(ip);
+
+        HashMap<String, Object> info = new HashMap<>();
+        info.put("ip", ip);
+        if ( ipLocation != null ) {
+            Location location = locationService.get(ipLocation);
+            info.put("location", location.getPath());
+
+            if ( placeApiService.isExpired(location) )
+                placeApiService.update(location);
+        }
+        model.addAttribute("info", info);
+
+        return "index";
+    }
+
+    @GetMapping(value = "/{country}/{city}")
+    public String getHomeContent(Model model, @PathVariable String country, @PathVariable String city) {
+        model.addAttribute("content", "@places");
+
+        Location location = locationService.get(country + "/" + city);
+        if ( location == null )
+            return redirect(null);
+
+        HashMap<String, Object> info = new HashMap<>();
+
+        info.put("location", location.getPath());
+
+        ArrayList<Place> places = new ArrayList<>(location.getPlaces());
+        Collections.sort(places, Place.RATING_COMPARATOR);
+        info.put("places", places);
+
+        if ( placeApiService.isExpired(location) )
+            placeApiService.update(location);
+
+        model.addAttribute("info", info);
+
+        return "index";
+    }
+
+    @GetMapping(value = "/privacy-policy")
+    public String getPolicyContent(Model model) {
+        model.addAttribute("content", "@policy");
+        return "index";
+    }
+
 }

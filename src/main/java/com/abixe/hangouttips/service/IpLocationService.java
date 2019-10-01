@@ -9,28 +9,28 @@ import com.abixe.hangouttips.model.IpLocation;
 
 public interface IpLocationService {
 
-	@Nullable
-	public IpLocation get(@NonNull Generation generation, long id);
-	
-	@Nullable
-	public IpLocation getLocation(@NonNull String ip);
-	
-	@Nullable
-	public IpLocation getLocation(@NonNull Long ip);
-	
-	@Nullable
-	public IpLocation getLocation(@NonNull BigDecimal ip);
-	
-	public enum Generation {
-		IPV4("."),
-		IPV6(":");
-		
-		public final String separator;
-		
-		private Generation(@NonNull String separator) {
-			this.separator = separator;
-		}		
-		
-	}	
-	
+    @Nullable
+    public IpLocation get(@NonNull Generation generation, long id);
+
+    @Nullable
+    public IpLocation getLocation(@NonNull String ip);
+
+    @Nullable
+    public IpLocation getLocation(@NonNull Long ip);
+
+    @Nullable
+    public IpLocation getLocation(@NonNull BigDecimal ip);
+
+    public enum Generation {
+        IPV4("."),
+        IPV6(":");
+
+        public final String separator;
+
+        private Generation(@NonNull String separator) {
+            this.separator = separator;
+        }
+
+    }
+
 }

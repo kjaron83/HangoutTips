@@ -21,49 +21,48 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @RequestMapping("api")
 public class ApiController {
 
-	private LocationService locationService;
-	private PlaceApiService placeApiService;
-	
-	@Autowired()
-	@Qualifier(value = "locationService")
-	public void setLocationService(LocationService locationService){
-		this.locationService = locationService;
-	}		
+    private LocationService locationService;
+    private PlaceApiService placeApiService;
 
-	@Autowired()
-	@Qualifier(value = "placeApiService")
-	public void setPlaceApiService(PlaceApiService placeApiService){
-		this.placeApiService = placeApiService;
-	}			
-	
-	@GetMapping(value = "/{country}/{city}", produces = "application/json")
-    public String pullPerson(@PathVariable String country, @PathVariable String city) {
-		Location location = locationService.get(country + "/" + city);
-    	    	
-    	return json(
-    			createResults(location != null && !placeApiService.isExpired(location))
-    			);
+    @Autowired()
+    @Qualifier(value = "locationService")
+    public void setLocationService(LocationService locationService) {
+        this.locationService = locationService;
     }
-	
+
+    @Autowired()
+    @Qualifier(value = "placeApiService")
+    public void setPlaceApiService(PlaceApiService placeApiService) {
+        this.placeApiService = placeApiService;
+    }
+
+    @GetMapping(value = "/{country}/{city}", produces = "application/json")
+    public String pullPerson(@PathVariable String country, @PathVariable String city) {
+        Location location = locationService.get(country + "/" + city);
+
+        return json(
+                createResults(location != null && !placeApiService.isExpired(location))
+                );
+    }
+
     private Map createResults(boolean success) {
-    	LinkedHashMap<String, Object> map = new LinkedHashMap<>();
-    	map.put("success", success);    		
-    	return map;
-    }	
+        LinkedHashMap<String, Object> map = new LinkedHashMap<>();
+        map.put("success", success);
+        return map;
+    }
 
     private static String json(@NonNull Map map) {
-    	String json = "";
-    	
-    	ObjectMapper mapper = new ObjectMapper();
-    	try {
-			json = mapper.writerWithDefaultPrettyPrinter()
-			  .writeValueAsString(map);
-		}
-    	catch (JsonProcessingException e) {
-    		throw new RuntimeException(e);
-		}    	
-    	
-    	return json;
-    }	
-	
+        String json = "";
+
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            json = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(map);
+        }
+        catch ( JsonProcessingException e ) {
+            throw new RuntimeException(e);
+        }
+
+        return json;
+    }
+
 }

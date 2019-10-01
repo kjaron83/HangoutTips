@@ -20,132 +20,128 @@ import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
 @Entity
-@Table(name="location")
+@Table(name = "location")
 public class Location implements Coordinate {
 
-	private long id;
-	private Double latitude; 
-	private Double longitude;
-	private String countryName;
-	private String cityName;	
-	private String path;	
-	private Date updated;
-	
-	private Set<Place> places = new HashSet<>();
-    	
-	@Id
-	@Column(name = "TABLE_ID")
-	@GeneratedValue(strategy=GenerationType.IDENTITY)	
-	public long getId() {
-		return id;
-	}
-	
-	public void setId(long id) {
-		this.id = id;
-	}
-	
-	@Column
-	@Nullable
-	public Double getLatitude() {
-		return latitude;
-	}
-	
-	public void setLatitude(@Nullable Double latitude) {
-		this.latitude = latitude;
-	}
-	
-	@Column
-	@Nullable
-	public Double getLongitude() {
-		return longitude;
-	}
-	
-	public void setLongitude(@Nullable Double longitude) {
-		this.longitude = longitude;
-	}
+    private long id;
+    private Double latitude;
+    private Double longitude;
+    private String countryName;
+    private String cityName;
+    private String path;
+    private Date updated;
 
-	
-	@Column(name = "country_name")
-	@Nullable	
-	public String getCountryName() {
-		return countryName;
-	}
+    private Set<Place> places = new HashSet<>();
 
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
+    @Id
+    @Column(name = "TABLE_ID")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    public long getId() {
+        return id;
+    }
 
-	@Column(name = "city_name")
-	@Nullable
-	public String getCityName() {
-		return cityName;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	public void setCityName(String cityName) {
-		this.cityName = cityName;
-	}
+    @Column
+    @Nullable
+    public Double getLatitude() {
+        return latitude;
+    }
 
-	@Column(name = "path")
-	@Nullable
-	public String getPath() {
-		return path;
-	}
+    public void setLatitude(@Nullable Double latitude) {
+        this.latitude = latitude;
+    }
 
-	public void setPath(String path) {
-		this.path = path;
-	}
+    @Column
+    @Nullable
+    public Double getLongitude() {
+        return longitude;
+    }
 
-	@Column
-	@Nullable
-	public Date getUpdated() {
-		return updated;
-	}
-	
-	public void setUpdated(@Nullable Date updated) {
-		this.updated = updated;
-	}
+    public void setLongitude(@Nullable Double longitude) {
+        this.longitude = longitude;
+    }
 
-    @JoinTable(
-            name = "location_place_connection", 
-            joinColumns = { @JoinColumn(name = "locationID") }, 
-            inverseJoinColumns = { @JoinColumn(name = "placeID") }
-        )
+    @Column(name = "country_name")
+    @Nullable
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(@Nullable String countryName) {
+        this.countryName = countryName;
+    }
+
+    @Column(name = "city_name")
+    @Nullable
+    public String getCityName() {
+        return cityName;
+    }
+
+    public void setCityName(@Nullable String cityName) {
+        this.cityName = cityName;
+    }
+
+    @Column(name = "path")
+    @Nullable
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(@Nullable String path) {
+        this.path = path;
+    }
+
+    @Column
+    @Nullable
+    public Date getUpdated() {
+        return updated;
+    }
+
+    public void setUpdated(@Nullable Date updated) {
+        this.updated = updated;
+    }
+
+    @JoinTable(name = "location_place_connection", joinColumns = {
+            @JoinColumn(name = "locationID") }, inverseJoinColumns = { @JoinColumn(name = "placeID") })
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
-	@NonNull
-	public Set<Place> getPlaces() {
-		return places;
-	}
+    @NonNull
+    public Set<Place> getPlaces() {
+        return places;
+    }
 
-	public void setPlaces(@NonNull Set<Place> places) {
-		this.places = places;
-	}	
-		
-	@NonNull
-	@Override
-	public String toString() {
-		return "[" + getId() + "] " + getLatitude() + ":" + getLongitude();
-	}
-	
-	@Override
-	public boolean equals(@Nullable Object obj) {
-		if ( obj == null || !( obj instanceof Location) )
-			return false;
-		
-		Location other = (Location) obj;
-		if ( id != 0 && other.getId() == id )
-			return true;
-		
-		return other.latitude != null && other.longitude != null
-				&& latitude != null && longitude != null
-				&& other.latitude.equals(latitude) && other.longitude.equals(longitude);
-	}
-	
-	@Override
-	public int hashCode() {
-		if ( latitude != null && longitude != null )
-			return latitude.hashCode() * longitude.hashCode() * 31;
-		
-		return super.hashCode();		
-	}
-	
+    public void setPlaces(@NonNull Set<Place> places) {
+        this.places = places;
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return "[" + getId() + "] " + getLatitude() + ":" + getLongitude();
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if ( obj == null || ! ( obj instanceof Location ) )
+            return false;
+
+        Location other = (Location) obj;
+        if ( id != 0 && other.getId() == id )
+            return true;
+
+        return other.latitude != null && other.longitude != null
+                && latitude != null && longitude != null
+                && other.latitude.equals(latitude) && other.longitude.equals(longitude);
+    }
+
+    @Override
+    public int hashCode() {
+        if ( latitude != null && longitude != null )
+            return latitude.hashCode() * longitude.hashCode() * 31;
+
+        return super.hashCode();
+    }
+
 }

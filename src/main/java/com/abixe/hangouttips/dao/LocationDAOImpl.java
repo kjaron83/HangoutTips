@@ -14,93 +14,92 @@ import com.abixe.hangouttips.model.Coordinate;
 
 public class LocationDAOImpl implements LocationDAO {
 
-	private static final Logger logger = LoggerFactory.getLogger(LocationDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(LocationDAOImpl.class);
 
-	private SessionFactory sessionFactory;
-	
-	public void setSessionFactory(@NonNull SessionFactory sessionFactory){
-		this.sessionFactory = sessionFactory;
-	}		
-	
-	@Nullable
-	@Override
-	public Location get(long id) {
-		Session session = sessionFactory.getCurrentSession();		
-		Location location = (Location) session.get(Location.class, id);
-		if ( logger.isInfoEnabled() ) {
-			if ( location == null )
-				logger.info("Location was not found by id: " + id);
-			else
-				logger.info("Location loaded successfully: " + location);		
-		}
-		return location;
-	}
+    private SessionFactory sessionFactory;
 
-	@Nullable
-	@Override
-	public Location get(@NonNull Coordinate coordinate) {
-		Session session = sessionFactory.getCurrentSession();
+    public void setSessionFactory(@NonNull SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
-		try {
-			Long id = (Long) session
-					.createQuery("SELECT l.id FROM Location l WHERE l.latitude = ?1 AND l.longitude = ?2")
-					.setParameter(1, coordinate.getLatitude())
-					.setParameter(2, coordinate.getLongitude())
-					.setFirstResult(0)
-					.setMaxResults(1)
-					.getSingleResult();
-			return get(id);			
-		}
-		catch (NoResultException e) {
-			logger.info(
-					"Location was not found by coordinate: "
-					+ coordinate.getLatitude() + ":" + coordinate.getLongitude()
-			);		
-		}
-		
-		return null;
-	}
+    @Nullable
+    @Override
+    public Location get(long id) {
+        Session session = sessionFactory.getCurrentSession();
+        Location location = (Location) session.get(Location.class, id);
+        if ( logger.isInfoEnabled() ) {
+            if ( location == null )
+                logger.info("Location was not found by id: " + id);
+            else
+                logger.info("Location loaded successfully: " + location);
+        }
+        return location;
+    }
 
-	@Nullable
-	@Override
-	public Location get(@NonNull String path) {
-		Session session = sessionFactory.getCurrentSession();
+    @Nullable
+    @Override
+    public Location get(@NonNull Coordinate coordinate) {
+        Session session = sessionFactory.getCurrentSession();
 
-		try {
-			Long id = (Long) session
-					.createQuery("SELECT l.id FROM Location l WHERE l.path = ?1")
-					.setParameter(1, path)
-					.setFirstResult(0)
-					.setMaxResults(1)
-					.getSingleResult();
-			return get(id);			
-		}
-		catch (NoResultException e) {
-			logger.info("Location was not found by path: " + path);		
-		}
-		
-		return null;
-	}
+        try {
+            Long id = (Long) session
+                    .createQuery("SELECT l.id FROM Location l WHERE l.latitude = ?1 AND l.longitude = ?2")
+                    .setParameter(1, coordinate.getLatitude())
+                    .setParameter(2, coordinate.getLongitude())
+                    .setFirstResult(0)
+                    .setMaxResults(1)
+                    .getSingleResult();
+            return get(id);
+        }
+        catch ( NoResultException e ) {
+            logger.info(
+                    "Location was not found by coordinate: "
+                            + coordinate.getLatitude() + ":" + coordinate.getLongitude());
+        }
 
-	@Override
-	public void add(@NonNull Location location) {
-		Session session = sessionFactory.getCurrentSession();
-		session.persist(location);
-		logger.info("Location saved successfully. Details: " + location);
-	}
+        return null;
+    }
 
-	@Override
-	public void update(@NonNull Location location) {
-		Session session = sessionFactory.getCurrentSession();
-		session.update(location);
-		logger.info("Location updated successfully. Details: " + location);
-	}
+    @Nullable
+    @Override
+    public Location get(@NonNull String path) {
+        Session session = sessionFactory.getCurrentSession();
 
-	@Override
-	public void remove(@NonNull Location location) {
-		Session session = sessionFactory.getCurrentSession();
-		session.delete(location);
-		logger.info("Location deleted successfully. Details: " + location);
-	}
+        try {
+            Long id = (Long) session
+                    .createQuery("SELECT l.id FROM Location l WHERE l.path = ?1")
+                    .setParameter(1, path)
+                    .setFirstResult(0)
+                    .setMaxResults(1)
+                    .getSingleResult();
+            return get(id);
+        }
+        catch ( NoResultException e ) {
+            logger.info("Location was not found by path: " + path);
+        }
+
+        return null;
+    }
+
+    @Override
+    public void add(@NonNull Location location) {
+        Session session = sessionFactory.getCurrentSession();
+        session.persist(location);
+        logger.info("Location saved successfully. Details: " + location);
+    }
+
+    @Override
+    public void update(@NonNull Location location) {
+        Session session = sessionFactory.getCurrentSession();
+        session.update(location);
+        logger.info("Location updated successfully. Details: " + location);
+    }
+
+    @Override
+    public void remove(@NonNull Location location) {
+        Session session = sessionFactory.getCurrentSession();
+        session.delete(location);
+        logger.info("Location deleted successfully. Details: " + location);
+    }
 
 }

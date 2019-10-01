@@ -8,20 +8,20 @@ import org.springframework.lang.Nullable;
 
 @Converter
 public class BooleanToStringConverter implements AttributeConverter<Boolean, String> {
-	
-	public static final String TRUE = "1";
-	public static final String FALSE = "0";
 
-	@NonNull
+    public static final String TRUE = "1";
+    public static final String FALSE = "0";
+
+    @NonNull
     @Override
-    public String convertToDatabaseColumn(@Nullable Boolean value) {        
-        return (value != null && value) ? TRUE : FALSE;            
-    }    
+    public String convertToDatabaseColumn(@Nullable Boolean value) {
+        return ( value != null && value ) ? TRUE : FALSE;
+    }
 
-	@NonNull
+    @NonNull
     @Override
     public Boolean convertToEntityAttribute(@Nullable String value) {
         return TRUE.equals(value);
     }
-	
+
 }
