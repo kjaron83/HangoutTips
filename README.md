@@ -19,4 +19,4 @@ To edit this project you need [Eclipse Java EE IDE for Web Developers](https://w
 * Build the **.war** file and deploy it to Tomcat.
 
 # License
-[MIT](http://vjpr.mit-license.org)
+[MIT](https://github.com/kjaron83/HangoutTips/blob/master/LICENSE)
