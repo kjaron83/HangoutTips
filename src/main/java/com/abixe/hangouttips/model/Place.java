@@ -167,12 +167,10 @@ public class Place {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null )
+        if ( !( obj instanceof Place ) )
             return false;
         if ( obj == this )
             return true;        
-        if ( !( obj instanceof Place ) )
-            return false;
         
         Place other = (Place) obj;
         return new EqualsBuilder()

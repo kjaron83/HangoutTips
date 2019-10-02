@@ -126,12 +126,10 @@ public class Location implements Coordinate {
     
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null )
+        if ( !( obj instanceof Location ) )
             return false;
         if ( obj == this )
             return true;        
-        if ( !( obj instanceof Location ) )
-            return false;
         
         Location other = (Location) obj;
         return new EqualsBuilder()

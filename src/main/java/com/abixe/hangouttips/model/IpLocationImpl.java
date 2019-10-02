@@ -107,12 +107,10 @@ public abstract class IpLocationImpl implements IpLocation {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null )
+        if ( !( obj instanceof IpLocationImpl ) )
             return false;
         if ( obj == this )
             return true;        
-        if ( !( obj instanceof IpLocationImpl ) )
-            return false;
         
         IpLocationImpl other = (IpLocationImpl) obj;
         return new EqualsBuilder()

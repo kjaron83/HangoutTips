@@ -128,12 +128,10 @@ public class Ipv6Location extends IpLocationImpl {
     
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null )
+        if ( !( obj instanceof Ipv6Location ) )
             return false;
         if ( obj == this )
             return true;        
-        if ( !( obj instanceof Ipv6Location ) )
-            return false;
 
         Ipv6Location other = (Ipv6Location) obj;
         return new EqualsBuilder()

@@ -122,12 +122,10 @@ public class Ipv4Location extends IpLocationImpl {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null )
+        if ( !( obj instanceof Ipv4Location ) )
             return false;
         if ( obj == this )
             return true;        
-        if ( !( obj instanceof Ipv4Location ) )
-            return false;
 
         Ipv4Location other = (Ipv4Location) obj;
         return new EqualsBuilder()
