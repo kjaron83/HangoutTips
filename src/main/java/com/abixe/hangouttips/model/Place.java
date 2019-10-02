@@ -162,7 +162,7 @@ public class Place {
     @NonNull
     @Override
     public String toString() {
-        return "[" + getId() + "] " + getName() + "(" + getAddress() + ")";
+        return "[" + getId() + "] " + getName() + " (" + getAddress() + ")";
     }
 
     @Override
