@@ -16,12 +16,16 @@
                                 <a href="${place.mapUrl}" rel="nofollow"><span class="fa fa-map-marker"></span> ${place.address}</a>
                             </div>
                             <ul class="facilities-list clearfix">
+                                <c:if test="${!empty place.phone}">
                                 <li>
                                     <span class="fa fa-phone"></span> ${place.phone}
                                 </li>
+                                </c:if>
+                                <c:if test="${!empty place.website}">
                                 <li>
                                     <span class="fa fa-home"></span> <a href="${place.website}" target="_blank" rel="nofollow">Website</a>
                                 </li>
+                                </c:if>
                             </ul>
                         </div>
                         <div class="card-body footer-properties">
