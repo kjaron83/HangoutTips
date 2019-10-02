@@ -16,6 +16,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -121,27 +123,41 @@ public class Location implements Coordinate {
     public String toString() {
         return "[" + getId() + "] " + getLatitude() + ":" + getLongitude();
     }
-
+    
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null || ! ( obj instanceof Location ) )
+        if ( obj == null )
             return false;
-
+        if ( obj == this )
+            return true;        
+        if ( !( obj instanceof Location ) )
+            return false;
+        
         Location other = (Location) obj;
-        if ( id != 0 && other.getId() == id )
-            return true;
-
-        return other.latitude != null && other.longitude != null
-                && latitude != null && longitude != null
-                && other.latitude.equals(latitude) && other.longitude.equals(longitude);
+        return new EqualsBuilder()
+                .appendSuper(super.equals(obj))
+                .append(id, other.id)
+                .append(latitude, other.latitude)
+                .append(longitude, other.longitude)
+                .append(countryName, other.countryName)
+                .append(cityName, other.cityName)
+                .append(path, other.path)
+                .append(updated, other.updated)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        if ( latitude != null && longitude != null )
-            return latitude.hashCode() * longitude.hashCode() * 31;
-
-        return super.hashCode();
+        return new HashCodeBuilder(19, 109)
+                .appendSuper(super.hashCode())
+                .append(id)
+                .append(latitude)
+                .append(longitude)
+                .append(countryName)
+                .append(cityName)
+                .append(path)
+                .append(updated)
+                .toHashCode();
     }
 
 }

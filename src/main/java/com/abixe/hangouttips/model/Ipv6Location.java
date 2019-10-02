@@ -12,6 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -122,6 +124,32 @@ public class Ipv6Location extends IpLocationImpl {
     @Override
     public String toString() {
         return "[" + getId() + "] " + getZipCode() + ". " + getCountryName() + ", " + getCityName();
+    }
+    
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if ( obj == null )
+            return false;
+        if ( obj == this )
+            return true;        
+        if ( !( obj instanceof Ipv6Location ) )
+            return false;
+
+        Ipv6Location other = (Ipv6Location) obj;
+        return new EqualsBuilder()
+                .appendSuper(super.equals(obj))
+                .append(ipFrom, other.ipFrom)
+                .append(ipTo, other.ipTo)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 107)
+                .appendSuper(super.hashCode())
+                .append(ipFrom)
+                .append(ipTo)
+                .toHashCode();
     }
 
 }

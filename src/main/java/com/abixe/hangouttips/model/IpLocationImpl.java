@@ -1,5 +1,7 @@
 package com.abixe.hangouttips.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.Nullable;
 
 public abstract class IpLocationImpl implements IpLocation {
@@ -103,4 +105,44 @@ public abstract class IpLocationImpl implements IpLocation {
         this.timeZone = timeZone;
     }
 
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if ( obj == null )
+            return false;
+        if ( obj == this )
+            return true;        
+        if ( !( obj instanceof IpLocationImpl ) )
+            return false;
+        
+        IpLocationImpl other = (IpLocationImpl) obj;
+        return new EqualsBuilder()
+                .appendSuper(super.equals(obj))
+                .append(id, other.id)
+                .append(countryCode, other.countryCode)
+                .append(countryName, other.countryName)
+                .append(regionName, other.regionName)
+                .append(cityName, other.cityName)
+                .append(latitude, other.latitude)
+                .append(longitude, other.longitude)
+                .append(zipCode, other.zipCode)
+                .append(timeZone, other.timeZone)
+                .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(11, 101)
+                .appendSuper(super.hashCode())
+                .append(id)
+                .append(countryCode)
+                .append(countryName)
+                .append(regionName)
+                .append(cityName)
+                .append(latitude)
+                .append(longitude)
+                .append(zipCode)
+                .append(timeZone)
+                .toHashCode();
+    }    
+    
 }

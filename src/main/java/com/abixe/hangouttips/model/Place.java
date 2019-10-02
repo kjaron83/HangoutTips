@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -165,22 +167,46 @@ public class Place {
 
     @Override
     public boolean equals(@Nullable Object obj) {
-        if ( obj == null || ! ( obj instanceof Place ) )
+        if ( obj == null )
             return false;
-
+        if ( obj == this )
+            return true;        
+        if ( !( obj instanceof Place ) )
+            return false;
+        
         Place other = (Place) obj;
-        if ( id != 0 && other.getId() == id )
-            return true;
-
-        return other.placeId != null && placeId != null && other.placeId.equals(placeId);
+        return new EqualsBuilder()
+                .appendSuper(super.equals(obj))
+                .append(id, other.id)
+                .append(placeId, other.placeId)
+                .append(name, other.name)
+                .append(rating, other.rating)
+                .append(address, other.address)
+                .append(phone, other.phone)
+                .append(website, other.website)
+                .append(mapUrl, other.mapUrl)
+                .append(photoReference, other.photoReference)
+                .append(photo, other.photo)
+                .append(updated, other.updated)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
-        if ( placeId != null )
-            return placeId.hashCode() * 31;
-
-        return super.hashCode();
+        return new HashCodeBuilder(23, 113)
+                .appendSuper(super.hashCode())
+                .append(id)
+                .append(placeId)
+                .append(name)
+                .append(rating)
+                .append(address)
+                .append(phone)
+                .append(website)
+                .append(mapUrl)
+                .append(photoReference)
+                .append(photo)
+                .append(updated)
+                .toHashCode();
     }
 
     private static class RatingComparator implements Comparator<Place> {
