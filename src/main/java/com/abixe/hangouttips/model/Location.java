@@ -146,7 +146,6 @@ public class Location implements Coordinate {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(19, 109)
-                .appendSuper(super.hashCode())
                 .append(id)
                 .append(latitude)
                 .append(longitude)

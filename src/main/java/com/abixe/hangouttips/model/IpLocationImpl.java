@@ -129,7 +129,6 @@ public abstract class IpLocationImpl implements IpLocation {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(11, 101)
-                .appendSuper(super.hashCode())
                 .append(id)
                 .append(countryCode)
                 .append(countryName)

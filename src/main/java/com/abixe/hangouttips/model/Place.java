@@ -191,7 +191,6 @@ public class Place {
     @Override
     public int hashCode() {
         return new HashCodeBuilder(23, 113)
-                .appendSuper(super.hashCode())
                 .append(id)
                 .append(placeId)
                 .append(name)
