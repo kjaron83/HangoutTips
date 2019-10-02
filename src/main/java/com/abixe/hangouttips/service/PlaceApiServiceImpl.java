@@ -164,6 +164,11 @@ public class PlaceApiServiceImpl implements PlaceApiService {
         logger.info("Downloading details of place: " + place.getPlaceId());
         PlaceDetails response = request
                 .placeId(place.getPlaceId())
+                .fields(
+                        PlaceDetailsRequest.FieldMask.INTERNATIONAL_PHONE_NUMBER,
+                        PlaceDetailsRequest.FieldMask.WEBSITE,
+                        PlaceDetailsRequest.FieldMask.URL
+                        )
                 .await();
         logger.info("Downloading was successfull.");
 
