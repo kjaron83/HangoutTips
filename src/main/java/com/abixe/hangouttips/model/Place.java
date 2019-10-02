@@ -176,7 +176,6 @@ public class Place {
         
         Place other = (Place) obj;
         return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
                 .append(id, other.id)
                 .append(placeId, other.placeId)
                 .append(name, other.name)

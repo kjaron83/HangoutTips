@@ -135,7 +135,6 @@ public class Location implements Coordinate {
         
         Location other = (Location) obj;
         return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
                 .append(id, other.id)
                 .append(latitude, other.latitude)
                 .append(longitude, other.longitude)

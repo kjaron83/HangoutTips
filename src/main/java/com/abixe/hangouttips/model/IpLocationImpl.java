@@ -116,7 +116,6 @@ public abstract class IpLocationImpl implements IpLocation {
         
         IpLocationImpl other = (IpLocationImpl) obj;
         return new EqualsBuilder()
-                .appendSuper(super.equals(obj))
                 .append(id, other.id)
                 .append(countryCode, other.countryCode)
                 .append(countryName, other.countryName)
