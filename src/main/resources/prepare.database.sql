@@ -69,7 +69,7 @@ CREATE TABLE `place` (
   `rating` double DEFAULT NULL,
   `address` text,
   `phone` varchar(255) DEFAULT NULL,
-  `website` varchar(255) DEFAULT NULL,
+  `website` text,
   `map_url` varchar(255) DEFAULT NULL,
   `photo_reference` varchar(255) DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL,
