@@ -54,11 +54,17 @@ public class PlaceApiServiceImpl implements PlaceApiService {
     @Value("${google.apiKey}")
     private String apiKey;
 
+    @Value("${location.update}")
+    private int locationUpdate;
+
     @Value("${location.nearby.radius}")
     private int radius;
 
-    @Value("${location.update}")
-    private int locationUpdate;
+    @Value("${location.nearby.increment}")
+    private int increment;
+
+    @Value("${location.places.minimum}")
+    private int minPlaces;
 
     @Value("${location.fetch.sleep}")
     private int locationSleep;
@@ -96,23 +102,37 @@ public class PlaceApiServiceImpl implements PlaceApiService {
     @Transactional
     public void update(@NonNull Location location) {
         try {
-            location = new LocationUpdater(location, radius, PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT, PlaceType.NIGHT_CLUB).update();            
-            locationDAO.update(location);
-            for ( Place place : location.getPlaces() ) {
-                if ( isExpired(place) ) {
-                    place = new PlaceUpdater(place).update();
-                    placeDAO.update(place);                    
-                    sleep(placeSleep);
-                }
-            }
+            location = repeatedlyUpdate(location, radius);            
         }
         catch ( Throwable t ) {
-            logger.error("Cannot find places near by " + location, t);
+            logger.error("An exception occurred while searching places nearby " + location, t);
         }
 
         location = locationDAO.get(location.getId());
         location.setUpdated(new Date());
         locationDAO.update(location);
+    }
+    
+    private Location repeatedlyUpdate(@NonNull Location location, int currentRadius) {
+        location = new LocationUpdater(location, currentRadius, PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT, PlaceType.NIGHT_CLUB).update();
+        locationDAO.update(location);
+        
+        Set<Place> places = location.getPlaces();
+        for ( Place place : places ) {
+            if ( isExpired(place) ) {
+                place = new PlaceUpdater(place).update();
+                placeDAO.update(place);                    
+                sleep(placeSleep);
+            }
+        }
+        
+        if ( places.size() < minPlaces ) {
+            currentRadius += increment;
+            logger.info("Too few places were found nearby the location. Trying again with radius: " + currentRadius);
+            return repeatedlyUpdate(location, currentRadius);
+        }
+        
+        return location;
     }
     
     private static void sleep(long millis) {
