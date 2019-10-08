@@ -7,6 +7,8 @@ import java.nio.file.Files;
 import java.util.Date;
 import java.util.Set;
 
+import javax.management.RuntimeErrorException;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -93,16 +95,14 @@ public class PlaceApiServiceImpl implements PlaceApiService {
     @Override
     @Transactional
     public void update(@NonNull Location location) {
-        LatLng latLng = convert(location);
-
         try {
-            location.getPlaces().clear();
-            findNearBy(location, latLng, PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT, PlaceType.NIGHT_CLUB);
+            location = new LocationUpdater(location, radius, PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT, PlaceType.NIGHT_CLUB).update();            
             locationDAO.update(location);
             for ( Place place : location.getPlaces() ) {
                 if ( isExpired(place) ) {
-                    update(place);
-                    Thread.sleep(placeSleep);
+                    place = new PlaceUpdater(place).update();
+                    placeDAO.update(place);                    
+                    sleep(placeSleep);
                 }
             }
         }
@@ -114,159 +114,16 @@ public class PlaceApiServiceImpl implements PlaceApiService {
         location.setUpdated(new Date());
         locationDAO.update(location);
     }
-
-    private void findNearBy(@NonNull Location location, @NonNull LatLng latLng, @NonNull PlaceType... placeTypes)
-            throws ApiException, InterruptedException, IOException {
-        for ( int i = 0; i < placeTypes.length; i++ ) {
-            findNearBy(location, latLng, placeTypes[i]);
-            Thread.sleep(locationSleep);
+    
+    private static void sleep(long millis) {
+        try {
+            Thread.sleep(millis);
         }
-    }
-
-    private void findNearBy(@NonNull Location location, @NonNull LatLng latLng, @NonNull PlaceType placeType)
-            throws ApiException, InterruptedException, IOException {
-        NearbySearchRequest request = new NearbySearchRequest(getContext());
-
-        logger.info("Searching places near by location: " + location);
-        PlacesSearchResponse response = request
-                .location(latLng)
-                .radius(radius)
-                .type(placeType)
-                .rankby(RankBy.PROMINENCE)
-                .await();
-        logger.info("Found " + response.results.length + " places.");
-
-        Set<Place> places = location.getPlaces();
-        Place place;
-        for ( int i = 0; i < response.results.length; i++ ) {
-            if ( !isTypeOf(response.results[i], PlaceType.LODGING, PlaceType.SPA)
-                    && response.results[i].rating >= ratingMinimum ) {
-                place = placeDAO.get(response.results[i].placeId);
-                if ( place == null || isExpired(place) )
-                    place = convert(response.results[i], place);
-
-                place.getLocations().add(location);
-                if ( place.getId() == 0 ) {
-                    placeDAO.add(place);
-                    place = placeDAO.get(place.getPlaceId());
-                }
-                else
-                    placeDAO.update(place);
-
-                places.add(place);
-            }
+        catch ( InterruptedException e ) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
         }
-    }
-
-    private Place update(@NonNull Place place) throws ApiException, InterruptedException, IOException {
-        PlaceDetailsRequest request = new PlaceDetailsRequest(getContext());
-
-        logger.info("Downloading details of place: " + place.getPlaceId());
-        PlaceDetails response = request
-                .placeId(place.getPlaceId())
-                .fields(
-                        PlaceDetailsRequest.FieldMask.INTERNATIONAL_PHONE_NUMBER,
-                        PlaceDetailsRequest.FieldMask.WEBSITE,
-                        PlaceDetailsRequest.FieldMask.URL
-                        )
-                .await();
-        logger.info("Downloading was successfull.");
-
-        place.setPhone(response.internationalPhoneNumber);
-        place.setWebsite(response.website != null ? response.website.toString() : null);
-        place.setMapUrl(response.url != null ? response.url.toString() : null);
-        place.setUpdated(new Date());
-
-        if ( place.getId() == 0 ) {
-            placeDAO.add(place);
-            return placeDAO.get(place.getPlaceId());
-        }
-
-        placeDAO.update(place);
-        return place;
-    }
-
-    private static boolean isTypeOf(@NonNull PlacesSearchResult result, @NonNull PlaceType... types) {
-        for ( int i = 0; i < result.types.length; i++ ) {
-            for ( int j = 0; j < types.length; j++ ) {
-                if ( result.types[i].equals(types[j].toUrlValue()) )
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    @NonNull
-    private static LatLng convert(@NonNull Coordinate coordinate) {
-        return new LatLng(coordinate.getLatitude(), coordinate.getLongitude());
-    }
-
-    @NonNull
-    private Place convert(@NonNull PlacesSearchResult result, @Nullable Place place)
-            throws ApiException, InterruptedException, IOException {
-        logger.info(result.name);
-        for ( int i = 0; i < result.types.length; i++ )
-            logger.info("- Type " + i + ": " + result.types[i]);
-
-        if ( place == null )
-            place = new Place();
-
-        place.setPlaceId(result.placeId);
-        place.setName(result.name);
-        place.setRating(result.rating * 1D);
-        if ( result.formattedAddress != null )
-            place.setAddress(result.formattedAddress);
-        else
-            place.setAddress(result.vicinity);
-
-        if ( result.photos != null && result.photos.length > 0 ) {
-            String reference = result.photos[0].photoReference;
-            if ( !reference.equals(place.getPhotoReference()) ) {
-                String oldPhoto = place.getPhoto();
-                if ( oldPhoto != null ) {
-                    logger.info("Removing old photo: " + oldPhoto);
-                    if ( new File(placePhotoPath + File.separator + oldPhoto).delete() ) {
-                        logger.info("Removing succeed.");
-                        place.setPhoto(null);
-                    }
-                    else
-                        logger.warn("Removing failed!");
-                }
-
-                place.setPhotoReference(reference);
-
-                logger.info("Downloading photo reference: " + reference);
-                PhotoRequest photoRequest = new PhotoRequest(getContext());
-                photoRequest.photoReference(reference);
-                photoRequest.maxHeight(placePhotoMaxheight);
-                photoRequest.maxWidth(placePhotoMaxwidth);
-                ImageResult image = photoRequest.await();
-                logger.info("Download finished. Content-type: " + image.contentType);
-
-                String fileName = String.format("%1$10s", Math.abs(reference.hashCode())).replace(' ', '0') + "-"
-                        + new Date().getTime() + ".jpg";
-                String folderName = fileName.substring(0, 3) + File.separator + fileName.substring(3, 6)
-                        + File.separator + fileName.substring(6, 9);
-
-                File finalFolder = new File(placePhotoPath + File.separator + folderName);
-                if ( !finalFolder.exists() )
-                    Files.createDirectories(finalFolder.toPath());
-
-                String finalFileName = folderName + File.separator + fileName;
-
-                logger.info("Saving photo to: " + finalFileName);
-                FileOutputStream out = new FileOutputStream(new File(placePhotoPath + File.separator + finalFileName));
-                out.write(image.imageData);
-                out.close();
-                logger.info("Saving finished.");
-
-                place.setPhoto(finalFileName);
-            }
-        }
-
-        return place;
-    }
+    }    
 
     public boolean isExpired(@NonNull Place place) {
         Date updated = place.getUpdated();
@@ -299,5 +156,232 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 
         return expired;
     }
+    
+    private class LocationUpdater {
+        
+        private final Location location;
+        private final Set<Place> places;
+        private final LatLng latLng;
+        
+        private final PlaceType[] placeTypes;
+        
+        private int currentRadius;
+        
+        public LocationUpdater(@NonNull Location location, int radius, @NonNull PlaceType... placeTypes) {
+            this.location = location;
+            this.places = location.getPlaces();
+            this.latLng = new LatLng(location.getLatitude(), location.getLongitude());
+            this.placeTypes = placeTypes;
+            this.currentRadius = radius;
+        }
+        
+        public Location update() {
+            places.clear();
+            for ( int i = 0; i < placeTypes.length; i++ )
+                findByPlaceType(placeTypes[i]);
+            return location;
+        }
+        
+        private void findByPlaceType(@NonNull PlaceType placeType) {
+            PlacesSearchResult[] retults = findNearBy(placeType);
+            processResults(retults);
+            sleep(locationSleep);
+        }
+        
+        @NonNull
+        private PlacesSearchResult[] findNearBy(@NonNull PlaceType placeType) {
+            NearbySearchRequest request = new NearbySearchRequest(getContext());
+            logger.info("Searching places near by location: " + location);
+            PlacesSearchResponse response;
+            try {
+                response = request
+                        .location(latLng)
+                        .radius(currentRadius)
+                        .type(placeType)
+                        .rankby(RankBy.PROMINENCE)
+                        .await();
+            }
+            catch ( Exception e ) {
+                throw new RuntimeException(e);
+            }
+            logger.info("Found " + response.results.length + " places.");
+            return response.results;
+        }
+            
+        private void processResults(@NonNull PlacesSearchResult[] results) {    
+            for ( int i = 0; i < results.length; i++ )
+                processResult(results[i]);
+        }   
+        
+        private void processResult(@NonNull PlacesSearchResult result) {
+            if ( isOfUnexpectedType(result) || result.rating < ratingMinimum )
+                return;
 
+            Place place = placeDAO.get(result.placeId);
+            if ( place == null || isExpired(place) )
+                place = convert(result, place);
+
+            place.getLocations().add(location);
+            if ( place.getId() == 0 ) {
+                placeDAO.add(place);
+                place = placeDAO.get(place.getPlaceId());
+            }
+            else
+                placeDAO.update(place);
+
+            places.add(place);
+        }    
+        
+        @NonNull
+        private Place convert(@NonNull PlacesSearchResult result, @Nullable Place place) {
+            logger.info(result.name);
+            for ( int i = 0; i < result.types.length; i++ )
+                logger.info("- Type " + i + ": " + result.types[i]);
+
+            if ( place == null )
+                place = new Place();
+
+            place.setPlaceId(result.placeId);
+            place.setName(result.name);
+            place.setRating(result.rating * 1D);
+            if ( result.formattedAddress != null )
+                place.setAddress(result.formattedAddress);
+            else
+                place.setAddress(result.vicinity);
+
+            if ( result.photos != null && result.photos.length > 0 )
+                updatePlacePhoto(place, result.photos[0].photoReference);
+
+            return place;
+        }
+        
+        private void updatePlacePhoto(@NonNull Place place, @NonNull String reference) {
+            if ( reference.equals(place.getPhotoReference()) )
+                return;
+            
+            String oldPhoto = place.getPhoto();
+            if ( oldPhoto != null ) {
+                logger.info("Removing old photo: " + oldPhoto);
+                if ( new File(placePhotoPath + File.separator + oldPhoto).delete() ) {
+                    logger.info("Removing succeed.");
+                    place.setPhoto(null);
+                }
+                else
+                    logger.warn("Removing failed!");
+            }
+
+            ImageResult image = downloadPhoto(reference);
+            place.setPhotoReference(reference);
+            place.setPhoto(savePhoto(reference, image));                        
+        }
+        
+        private ImageResult downloadPhoto(@NonNull String reference) {
+            logger.info("Downloading photo reference: " + reference);
+            PhotoRequest photoRequest = new PhotoRequest(getContext());
+            photoRequest.photoReference(reference);
+            photoRequest.maxHeight(placePhotoMaxheight);
+            photoRequest.maxWidth(placePhotoMaxwidth);
+            ImageResult image;
+            try {
+                image = photoRequest.await();
+            }
+            catch ( Exception e ) {
+                throw new RuntimeException(e);
+            }
+            logger.info("Download finished. Content-type: " + image.contentType);
+            return image;
+        }
+        
+        private String savePhoto(@NonNull String reference, @NonNull ImageResult image) {
+            String fileName = String.format("%1$10s", Math.abs(reference.hashCode())).replace(' ', '0') + "-"
+                    + new Date().getTime() + ".jpg";
+            String folderName = fileName.substring(0, 3) + File.separator + fileName.substring(3, 6)
+                    + File.separator + fileName.substring(6, 9);
+
+            File finalFolder = new File(placePhotoPath + File.separator + folderName);
+            String finalFileName = folderName + File.separator + fileName;
+            
+            try {
+                if ( !finalFolder.exists() )
+                    Files.createDirectories(finalFolder.toPath());
+
+                logger.info("Saving photo to: " + finalFileName);
+                FileOutputStream out = new FileOutputStream(new File(placePhotoPath + File.separator + finalFileName));
+                out.write(image.imageData);
+                out.close();
+                logger.info("Saving finished.");
+            }
+            catch ( IOException e ) {
+                throw new RuntimeException(e);
+            }
+            
+            return finalFileName;
+        }
+
+        private boolean isOfUnexpectedType(@NonNull PlacesSearchResult result) {
+            return isTypeOf(result, PlaceType.LODGING, PlaceType.SPA);
+        }
+        
+        private boolean isTypeOf(@NonNull PlacesSearchResult result, @NonNull PlaceType... types) {
+            for ( int i = 0; i < result.types.length; i++ ) {
+                for ( int j = 0; j < types.length; j++ ) {
+                    if ( result.types[i].equals(types[j].toUrlValue()) )
+                        return true;
+                }
+            }
+
+            return false;
+        }        
+                
+    } 
+    
+    private class PlaceUpdater {
+        
+        private final Place place;
+        
+        public PlaceUpdater(@NonNull Place place) {
+            this.place = place;
+        }
+        
+        public Place update() {
+            PlaceDetails details = getDetails();
+
+            place.setPhone(details.internationalPhoneNumber);
+            place.setWebsite(details.website != null ? details.website.toString() : null);
+            place.setMapUrl(details.url != null ? details.url.toString() : null);
+            place.setUpdated(new Date());
+
+            if ( place.getId() == 0 ) {
+                placeDAO.add(place);
+                return placeDAO.get(place.getPlaceId());
+            }
+
+            return place;            
+        }
+        
+        private PlaceDetails getDetails() {
+            PlaceDetailsRequest request = new PlaceDetailsRequest(getContext());
+
+            logger.info("Downloading details of place: " + place.getPlaceId());
+            PlaceDetails response;
+            try {
+                response = request
+                        .placeId(place.getPlaceId())
+                        .fields(
+                                PlaceDetailsRequest.FieldMask.INTERNATIONAL_PHONE_NUMBER,
+                                PlaceDetailsRequest.FieldMask.WEBSITE,
+                                PlaceDetailsRequest.FieldMask.URL
+                                )
+                        .await();
+            }
+            catch ( Exception e ) {
+                throw new RuntimeException(e);
+            }
+            logger.info("Downloading was successfull.");
+            
+            return response;
+        }
+        
+    }
+    
 }
