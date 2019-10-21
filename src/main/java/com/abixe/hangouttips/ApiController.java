@@ -34,8 +34,8 @@ public class ApiController {
     @Qualifier(value = "ipLocationService")
     public void setIpLocationService(IpLocationService ipLocationService) {
         this.ipLocationService = ipLocationService;
-    }    
-    
+    }
+
     @Autowired()
     @Qualifier(value = "locationService")
     public void setLocationService(LocationService locationService) {
@@ -56,7 +56,7 @@ public class ApiController {
                 createResults(location != null && !placeApiService.isExpired(location))
                 );
     }
-    
+
     @GetMapping(value = "/test")
     public String pullIpLocationInfo(Model model, HttpServletRequest request) {
         String ip = request.getRemoteAddr();
@@ -73,7 +73,7 @@ public class ApiController {
         model.addAttribute("info", info);
 
         return json(info);
-    }    
+    }
 
     @GetMapping(value = "/{country}/{city}/update", produces = "application/json")
     public String pullLocationUpdate(@PathVariable String country, @PathVariable String city) {
@@ -92,7 +92,7 @@ public class ApiController {
         return map;
     }
 
-    private static String json(@NonNull Map map) {
+    private static String json(@NonNull Map<String, Object> map) {
         String json = "";
 
         ObjectMapper mapper = new ObjectMapper();
