@@ -7,8 +7,6 @@ import java.nio.file.Files;
 import java.util.Date;
 import java.util.Set;
 
-import javax.management.RuntimeErrorException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.abixe.hangouttips.dao.LocationDAO;
 import com.abixe.hangouttips.dao.PlaceDAO;
-import com.abixe.hangouttips.model.Coordinate;
 import com.abixe.hangouttips.model.Location;
 import com.abixe.hangouttips.model.Place;
 import com.google.maps.GeoApiContext;
@@ -27,7 +24,6 @@ import com.google.maps.ImageResult;
 import com.google.maps.NearbySearchRequest;
 import com.google.maps.PhotoRequest;
 import com.google.maps.PlaceDetailsRequest;
-import com.google.maps.errors.ApiException;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.PlaceDetails;
 import com.google.maps.model.PlaceType;
@@ -102,7 +98,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
     @Transactional
     public void update(@NonNull Location location) {
         try {
-            location = repeatedlyUpdate(location, radius);            
+            location = repeatedlyUpdate(location, radius);
         }
         catch ( Throwable t ) {
             logger.error("An exception occurred while searching places nearby " + location, t);
@@ -112,29 +108,29 @@ public class PlaceApiServiceImpl implements PlaceApiService {
         location.setUpdated(new Date());
         locationDAO.update(location);
     }
-    
+
     private Location repeatedlyUpdate(@NonNull Location location, int currentRadius) {
         location = new LocationUpdater(location, currentRadius, PlaceType.BAR, PlaceType.CAFE, PlaceType.RESTAURANT, PlaceType.NIGHT_CLUB).update();
         locationDAO.update(location);
-        
+
         Set<Place> places = location.getPlaces();
         for ( Place place : places ) {
             if ( isExpired(place) ) {
                 place = new PlaceUpdater(place).update();
-                placeDAO.update(place);                    
+                placeDAO.update(place);
                 sleep(placeSleep);
             }
         }
-        
+
         if ( places.size() < minPlaces ) {
             currentRadius += increment;
             logger.info("Too few places were found nearby the location. Trying again with radius: " + currentRadius);
             return repeatedlyUpdate(location, currentRadius);
         }
-        
+
         return location;
     }
-    
+
     private static void sleep(long millis) {
         try {
             Thread.sleep(millis);
@@ -143,7 +139,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
-    }    
+    }
 
     public boolean isExpired(@NonNull Place place) {
         Date updated = place.getUpdated();
@@ -176,17 +172,17 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 
         return expired;
     }
-    
+
     private class LocationUpdater {
-        
+
         private final Location location;
         private final Set<Place> places;
         private final LatLng latLng;
-        
+
         private final PlaceType[] placeTypes;
-        
+
         private int currentRadius;
-        
+
         public LocationUpdater(@NonNull Location location, int radius, @NonNull PlaceType... placeTypes) {
             this.location = location;
             this.places = location.getPlaces();
@@ -194,20 +190,20 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             this.placeTypes = placeTypes;
             this.currentRadius = radius;
         }
-        
+
         public Location update() {
             places.clear();
             for ( int i = 0; i < placeTypes.length; i++ )
                 findByPlaceType(placeTypes[i]);
             return location;
         }
-        
+
         private void findByPlaceType(@NonNull PlaceType placeType) {
             PlacesSearchResult[] retults = findNearBy(placeType);
             processResults(retults);
             sleep(locationSleep);
         }
-        
+
         @NonNull
         private PlacesSearchResult[] findNearBy(@NonNull PlaceType placeType) {
             NearbySearchRequest request = new NearbySearchRequest(getContext());
@@ -227,12 +223,12 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             logger.info("Found " + response.results.length + " places.");
             return response.results;
         }
-            
-        private void processResults(@NonNull PlacesSearchResult[] results) {    
+
+        private void processResults(@NonNull PlacesSearchResult[] results) {
             for ( int i = 0; i < results.length; i++ )
                 processResult(results[i]);
-        }   
-        
+        }
+
         private void processResult(@NonNull PlacesSearchResult result) {
             if ( isOfUnexpectedType(result) || result.rating < ratingMinimum )
                 return;
@@ -241,7 +237,6 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             if ( place == null || isExpired(place) )
                 place = convert(result, place);
 
-            place.getLocations().add(location);
             if ( place.getId() == 0 ) {
                 placeDAO.add(place);
                 place = placeDAO.get(place.getPlaceId());
@@ -250,8 +245,8 @@ public class PlaceApiServiceImpl implements PlaceApiService {
                 placeDAO.update(place);
 
             places.add(place);
-        }    
-        
+        }
+
         @NonNull
         private Place convert(@NonNull PlacesSearchResult result, @Nullable Place place) {
             logger.info(result.name);
@@ -274,14 +269,14 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 
             return place;
         }
-        
+
         private void updatePlacePhoto(@NonNull Place place, @NonNull String reference) {
             if ( reference.equals(place.getPhotoReference()) )
                 return;
-            
+
             String oldPhoto = place.getPhoto();
             if ( oldPhoto != null ) {
-                logger.info("Removing old photo: " + oldPhoto);
+                logger.info("Removing old photo: " + oldPhoto + " " + place.getPhotoReference());
                 if ( new File(placePhotoPath + File.separator + oldPhoto).delete() ) {
                     logger.info("Removing succeed.");
                     place.setPhoto(null);
@@ -292,9 +287,9 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 
             ImageResult image = downloadPhoto(reference);
             place.setPhotoReference(reference);
-            place.setPhoto(savePhoto(reference, image));                        
+            place.setPhoto(savePhoto(reference, image));
         }
-        
+
         private ImageResult downloadPhoto(@NonNull String reference) {
             logger.info("Downloading photo reference: " + reference);
             PhotoRequest photoRequest = new PhotoRequest(getContext());
@@ -311,7 +306,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             logger.info("Download finished. Content-type: " + image.contentType);
             return image;
         }
-        
+
         private String savePhoto(@NonNull String reference, @NonNull ImageResult image) {
             String fileName = String.format("%1$10s", Math.abs(reference.hashCode())).replace(' ', '0') + "-"
                     + new Date().getTime() + ".jpg";
@@ -320,7 +315,7 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 
             File finalFolder = new File(placePhotoPath + File.separator + folderName);
             String finalFileName = folderName + File.separator + fileName;
-            
+
             try {
                 if ( !finalFolder.exists() )
                     Files.createDirectories(finalFolder.toPath());
@@ -334,14 +329,14 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             catch ( IOException e ) {
                 throw new RuntimeException(e);
             }
-            
+
             return finalFileName;
         }
 
         private boolean isOfUnexpectedType(@NonNull PlacesSearchResult result) {
             return isTypeOf(result, PlaceType.LODGING, PlaceType.SPA);
         }
-        
+
         private boolean isTypeOf(@NonNull PlacesSearchResult result, @NonNull PlaceType... types) {
             for ( int i = 0; i < result.types.length; i++ ) {
                 for ( int j = 0; j < types.length; j++ ) {
@@ -351,18 +346,18 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             }
 
             return false;
-        }        
-                
-    } 
-    
+        }
+
+    }
+
     private class PlaceUpdater {
-        
+
         private final Place place;
-        
+
         public PlaceUpdater(@NonNull Place place) {
             this.place = place;
         }
-        
+
         public Place update() {
             PlaceDetails details = getDetails();
 
@@ -376,9 +371,9 @@ public class PlaceApiServiceImpl implements PlaceApiService {
                 return placeDAO.get(place.getPlaceId());
             }
 
-            return place;            
+            return place;
         }
-        
+
         private PlaceDetails getDetails() {
             PlaceDetailsRequest request = new PlaceDetailsRequest(getContext());
 
@@ -398,10 +393,10 @@ public class PlaceApiServiceImpl implements PlaceApiService {
                 throw new RuntimeException(e);
             }
             logger.info("Downloading was successfull.");
-            
+
             return response;
         }
-        
+
     }
-    
+
 }
