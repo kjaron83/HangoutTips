@@ -1,3 +1,8 @@
+/*
+ * IpLocationServiceImpl.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.service;
 
 import java.math.BigDecimal;
@@ -10,6 +15,11 @@ import com.abixe.hangouttips.dao.Ipv4LocationDAO;
 import com.abixe.hangouttips.dao.Ipv6LocationDAO;
 import com.abixe.hangouttips.model.IpLocation;
 
+/**
+ * This class implements the {@link IpLocationService} interface and uses {@link Ipv4LocationDAO},
+ * or {@link Ipv6LocationDAO}, to get {@link IpLocation} instances from the database.
+ * @author kjaron83
+ */
 public class IpLocationServiceImpl implements IpLocationService {
 
     private Ipv4LocationDAO ipv4LocationDAO;

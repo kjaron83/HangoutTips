@@ -1,3 +1,8 @@
+/*
+ * MainController.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips;
 
 import java.util.ArrayList;
@@ -20,6 +25,10 @@ import com.abixe.hangouttips.service.IpLocationService;
 import com.abixe.hangouttips.service.LocationService;
 import com.abixe.hangouttips.service.PlaceApiService;
 
+/**
+ * This controller handles the visitors' requests, sets the attributes of the model, and returns a template filename.
+ * @author kjaron83
+ */
 @Controller
 public class MainController extends DefaultController {
 
@@ -45,6 +54,9 @@ public class MainController extends DefaultController {
         this.placeApiService = placeApiService;
     }
 
+    /**
+     * Ensure the content of the home page.
+     */
     @GetMapping(value = "/")
     public String getHomeContent(Model model, HttpServletRequest request) {
         model.addAttribute("content", "@home");
@@ -66,6 +78,9 @@ public class MainController extends DefaultController {
         return "index";
     }
 
+    /**
+     * Ensure the content of the specified location.
+     */
     @GetMapping(value = "/{country}/{city}")
     public String getHomeContent(Model model, @PathVariable String country, @PathVariable String city) {
         model.addAttribute("content", "@places");
@@ -90,6 +105,9 @@ public class MainController extends DefaultController {
         return "index";
     }
 
+    /**
+     * Ensure the content of the privacy policy page.
+     */
     @GetMapping(value = "/privacy-policy")
     public String getPolicyContent(Model model) {
         model.addAttribute("content", "@policy");

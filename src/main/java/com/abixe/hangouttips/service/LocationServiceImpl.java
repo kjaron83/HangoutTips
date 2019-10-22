@@ -1,3 +1,8 @@
+/*
+ * LocationServiceImpl.java
+ * Create Date: Aug 24, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.service;
 
 import org.springframework.lang.NonNull;
@@ -8,6 +13,11 @@ import com.abixe.hangouttips.dao.LocationDAO;
 import com.abixe.hangouttips.model.IpLocation;
 import com.abixe.hangouttips.model.Location;
 
+/**
+ * This class implements the {@link LocationService} interface and uses {@link LocationDAO} to get {@link Location}
+ * instances from the database.
+ * @author kjaron83
+ */
 public class LocationServiceImpl implements LocationService {
 
     private LocationDAO locationDAO;

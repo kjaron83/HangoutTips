@@ -1,3 +1,8 @@
+/*
+ * PlaceDAOImpl.java
+ * Create Date: Aug 24, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.model;
 
 import java.util.Comparator;
@@ -18,13 +23,25 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+/**
+ * This class represents a <a href="https://developers.google.com/places/web-service/details"> Google Places
+ * entity</a>, stored in a database.
+ * @author kjaron83
+ */
 @Entity
 @Table(name = "place")
 public class Place {
 
+    /**
+     * This comparator can be used to sort a collection of places by their rating in descending order.
+     */
     public static final Comparator<Place> RATING_COMPARATOR = new RatingComparator();
 
     private long id;
+    /**
+     * A textual identifier that uniquely identifies a place. For more information about place IDs, see the
+     * <a href="https://developers.google.com/places/web-service/place-id">place ID overview</a>.
+     */
     private String placeId;
     private String name;
     private Double rating;
@@ -32,10 +49,25 @@ public class Place {
     private String phone;
     private String website;
     private String mapUrl;
+    /**
+     * A string used to identify the photo when you perform a photo request. For more information about photo
+     * references, see the <a href="https://developers.google.com/places/web-service/photos">place photos
+     * overview</a>.
+     */
     private String photoReference;
+    /**
+     * A relative path on the local file system whither the {@link #photoReference} was downloaded. The absolute path
+     * value will be ${place.photo.path} + {@link #photo}.
+     */
     private String photo;
+    /**
+     * The date when the details of the place were updated in the data source.
+     */
     private Date updated;
 
+    /**
+     * A set of the locations which this place is near to.
+     */
     private Set<Location> locations = new HashSet<>();
 
     @Id
@@ -49,12 +81,18 @@ public class Place {
         this.id = id;
     }
 
+    /**
+     * @see #placeId
+     */
     @Column(name = "place_id")
     @Nullable
     public String getPlaceId() {
         return placeId;
     }
 
+    /**
+     * @see #placeId
+     */
     public void setPlaceId(@Nullable String placeId) {
         this.placeId = placeId;
     }
@@ -119,42 +157,66 @@ public class Place {
         this.mapUrl = mapUrl;
     }
 
+    /**
+     * @see #photoReference
+     */
     @Column(name = "photo_reference")
     @Nullable
     public String getPhotoReference() {
         return photoReference;
     }
 
+    /**
+     * @see #photoReference
+     */
     public void setPhotoReference(@Nullable String photoReference) {
         this.photoReference = photoReference;
     }
 
+    /**
+     * @see #photo
+     */
     @Column
     @Nullable
     public String getPhoto() {
         return photo;
     }
 
+    /**
+     * @see #photo
+     */
     public void setPhoto(@Nullable String photo) {
         this.photo = photo;
     }
 
+    /**
+     * @see #updated
+     */
     @Column
     @Nullable
     public Date getUpdated() {
         return updated;
     }
 
+    /**
+     * @see #updated
+     */
     public void setUpdated(@Nullable Date updated) {
         this.updated = updated;
     }
 
+    /**
+     * @see #locations
+     */
     @ManyToMany(mappedBy = "places")
     @NonNull
     public Set<Location> getLocations() {
         return locations;
     }
 
+    /**
+     * @see #locations
+     */
     public void setLocations(@NonNull Set<Location> locations) {
         this.locations = locations;
     }
@@ -170,8 +232,8 @@ public class Place {
         if ( !( obj instanceof Place ) )
             return false;
         if ( obj == this )
-            return true;        
-        
+            return true;
+
         Place other = (Place) obj;
         return new EqualsBuilder()
                 .append(id, other.id)

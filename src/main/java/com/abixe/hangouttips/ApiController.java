@@ -1,3 +1,8 @@
+/*
+ * PlaceApiServiceImpl.java
+ * Create Date: Sep 14, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips;
 
 import java.util.LinkedHashMap;
@@ -22,6 +27,10 @@ import com.abixe.hangouttips.service.PlaceApiService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * This controller handles the API requests and returns JSON encoded answers.
+ * @author kjaron83
+ */
 @RestController
 @RequestMapping("api")
 public class ApiController {
@@ -48,6 +57,9 @@ public class ApiController {
         this.placeApiService = placeApiService;
     }
 
+    /**
+     * Returns whether the details of the specified location are expired.
+     */
     @GetMapping(value = "/{country}/{city}", produces = "application/json")
     public String pullLocationIsExpired(@PathVariable String country, @PathVariable String city) {
         Location location = locationService.get(country + "/" + city);
@@ -57,6 +69,9 @@ public class ApiController {
                 );
     }
 
+    /**
+     * Tests if the location can be found by the current IP address, and returns some info about the location.
+     */
     @GetMapping(value = "/test")
     public String pullIpLocationInfo(Model model, HttpServletRequest request) {
         String ip = request.getRemoteAddr();
@@ -75,6 +90,9 @@ public class ApiController {
         return json(info);
     }
 
+    /**
+     * Tries to find a location by the specified path value, and executes an update if the location was found.
+     */
     @GetMapping(value = "/{country}/{city}/update", produces = "application/json")
     public String pullLocationUpdate(@PathVariable String country, @PathVariable String city) {
         Location location = locationService.get(country + "/" + city);
@@ -86,12 +104,18 @@ public class ApiController {
                 );
     }
 
+    /**
+     * Creates a map for further use, which contains the value of the specified success parameter.
+     */
     private Map<String, Object> createResults(boolean success) {
         LinkedHashMap<String, Object> map = new LinkedHashMap<>();
         map.put("success", success);
         return map;
     }
 
+    /**
+     * Encodes the specified map to a JSON string.
+     */
     private static String json(@NonNull Map<String, Object> map) {
         String json = "";
 

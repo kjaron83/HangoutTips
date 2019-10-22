@@ -1,9 +1,18 @@
+/*
+ * IpLocationImpl.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.model;
 
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.Nullable;
 
+/**
+ * This abstract class implements the {@link IpLocation} interface, and provides default methods to the offsprings.
+ * @author kjaron83
+ */
 public abstract class IpLocationImpl implements IpLocation {
 
     private long id;
@@ -110,8 +119,8 @@ public abstract class IpLocationImpl implements IpLocation {
         if ( !( obj instanceof IpLocationImpl ) )
             return false;
         if ( obj == this )
-            return true;        
-        
+            return true;
+
         IpLocationImpl other = (IpLocationImpl) obj;
         return new EqualsBuilder()
                 .append(id, other.id)
@@ -139,6 +148,6 @@ public abstract class IpLocationImpl implements IpLocation {
                 .append(zipCode)
                 .append(timeZone)
                 .toHashCode();
-    }    
-    
+    }
+
 }

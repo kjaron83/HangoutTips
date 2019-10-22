@@ -1,3 +1,8 @@
+/*
+ * Ipv6Location.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.model;
 
 import java.math.BigDecimal;
@@ -17,6 +22,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+/**
+ * This class extends the {@link IpLocationImpl} class, and represents an IPV6 address, stored in a database.
+ * @author kjaron83
+ */
 @Entity
 @Table(name = "ip2location_db11_ipv6")
 public class Ipv6Location extends IpLocationImpl {
@@ -109,6 +118,9 @@ public class Ipv6Location extends IpLocationImpl {
         return super.getTimeZone();
     }
 
+    /**
+     * Converts an IP address to a numeric value.
+     */
     @NonNull
     public static BigDecimal convert(@NonNull String ip) {
         try {
@@ -125,13 +137,13 @@ public class Ipv6Location extends IpLocationImpl {
     public String toString() {
         return "[" + getId() + "] " + getZipCode() + ". " + getCountryName() + ", " + getCityName();
     }
-    
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if ( !( obj instanceof Ipv6Location ) )
             return false;
         if ( obj == this )
-            return true;        
+            return true;
 
         Ipv6Location other = (Ipv6Location) obj;
         return new EqualsBuilder()

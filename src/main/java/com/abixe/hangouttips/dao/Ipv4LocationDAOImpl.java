@@ -1,3 +1,8 @@
+/*
+ * Ipv4LocationDAOImpl.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.dao;
 
 import javax.persistence.NoResultException;
@@ -11,6 +16,11 @@ import org.springframework.lang.Nullable;
 
 import com.abixe.hangouttips.model.Ipv4Location;
 
+/**
+ * This class implements the {@link Ipv4LocationDAO} interface and uses {@link Session} to get {@link Ipv4Location}
+ * instances from the database.
+ * @author kjaron83
+ */
 public class Ipv4LocationDAOImpl implements Ipv4LocationDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(Ipv4LocationDAOImpl.class);

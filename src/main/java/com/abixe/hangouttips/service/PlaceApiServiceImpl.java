@@ -1,3 +1,8 @@
+/*
+ * PlaceApiServiceImpl.java
+ * Create Date: Aug 24, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.service;
 
 import java.io.File;
@@ -31,6 +36,12 @@ import com.google.maps.model.PlacesSearchResponse;
 import com.google.maps.model.PlacesSearchResult;
 import com.google.maps.model.RankBy;
 
+/**
+ * This class implements the {@link PlaceApiService} interface and uses {@link LocationDAO}, and {@link PlaceDAO}, to
+ * update {@link Location}, and {@link Place} instances in the database. This class also uses
+ * <a href="https://developers.google.com/places/web-service/intro"> Google Places API</a> during the update.
+ * @author kjaron83
+ */
 public class PlaceApiServiceImpl implements PlaceApiService {
 
     private static final Logger logger = LoggerFactory.getLogger(PlaceApiServiceImpl.class);
@@ -47,33 +58,64 @@ public class PlaceApiServiceImpl implements PlaceApiService {
         this.placeDAO = placeDAO;
     }
 
+    /**
+     * To use the Google Places API you must have an API key. For more information about the API key, see the
+     * <a href="https://developers.google.com/places/web-service/get-api-key">API key overview</a>.
+     */
     @Value("${google.apiKey}")
     private String apiKey;
 
+    /**
+     * Updating period of a location in milliseconds.
+     */
     @Value("${location.update}")
     private int locationUpdate;
 
+    /**
+     * Radius of the searching nearby places (in meters).
+     */
     @Value("${location.nearby.radius}")
     private int radius;
 
+    /**
+     * If too few places were found nearby the location, the application increases the search radius repeatedly.
+     */
     @Value("${location.nearby.increment}")
     private int increment;
 
+    /**
+     * Minimum number of places per location.
+     */
     @Value("${location.places.minimum}")
     private int minPlaces;
 
+    /**
+     * Waiting time after a location was fetched in milliseconds.
+     */
     @Value("${location.fetch.sleep}")
     private int locationSleep;
 
+    /**
+     * Updating period of a place in milliseconds.
+     */
     @Value("${place.update}")
     private int placeUpdate;
 
+    /**
+     * Waiting time after a place was fetched in milliseconds.
+     */
     @Value("${place.fetch.sleep}")
     private int placeSleep;
 
+    /**
+     * Minimum rating of places.
+     */
     @Value("${place.rating.minimum}")
     private double ratingMinimum;
 
+    /**
+     * The folder name where the photos of the places will be saved.
+     */
     @Value("${place.photo.path}")
     private String placePhotoPath;
 
@@ -173,6 +215,11 @@ public class PlaceApiServiceImpl implements PlaceApiService {
         return expired;
     }
 
+    /**
+     * This class can be used to update the set of the nearby {@link Place}s of a {@link Location}. It also updates
+     * the public details of the {@link Place} which are described in the {@link PlacesSearchResult} class.
+     * @author kjaron83
+     */
     private class LocationUpdater {
 
         private final Location location;
@@ -350,6 +397,11 @@ public class PlaceApiServiceImpl implements PlaceApiService {
 
     }
 
+    /**
+     * This class can be used to update contact data of the {@link Place} which are described in the
+     * {@link PlaceDetails} class.
+     * @author kjaron83
+     */
     private class PlaceUpdater {
 
         private final Place place;

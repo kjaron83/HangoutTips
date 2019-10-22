@@ -1,3 +1,8 @@
+/*
+ * PlaceDAOImpl.java
+ * Create Date: Aug 24, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.dao;
 
 import javax.persistence.NoResultException;
@@ -11,6 +16,11 @@ import org.springframework.lang.Nullable;
 
 import com.abixe.hangouttips.model.Place;
 
+/**
+ * This class implements the {@link PlaceDAO} interface and uses {@link Session} to get {@link Place}
+ * instances from the database.
+ * @author kjaron83
+ */
 public class PlaceDAOImpl implements PlaceDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(PlaceDAOImpl.class);

@@ -1,3 +1,8 @@
+/*
+ * Ipv4Location.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.model;
 
 import javax.persistence.Column;
@@ -12,6 +17,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+/**
+ * This class extends the {@link IpLocationImpl} class, and represents an IPV4 address, stored in a database.
+ * @author kjaron83
+ */
 @Entity
 @Table(name = "ip2location_db11")
 public class Ipv4Location extends IpLocationImpl {
@@ -104,6 +113,9 @@ public class Ipv4Location extends IpLocationImpl {
         return super.getTimeZone();
     }
 
+    /**
+     * Converts an IP address to a numeric value.
+     */
     public static long convert(@NonNull String ip) {
         String[] parts = ip.split("\\.");
 
@@ -125,7 +137,7 @@ public class Ipv4Location extends IpLocationImpl {
         if ( !( obj instanceof Ipv4Location ) )
             return false;
         if ( obj == this )
-            return true;        
+            return true;
 
         Ipv4Location other = (Ipv4Location) obj;
         return new EqualsBuilder()
@@ -143,6 +155,6 @@ public class Ipv4Location extends IpLocationImpl {
                 .append(ipTo)
                 .toHashCode();
     }
-    
-    
+
+
 }

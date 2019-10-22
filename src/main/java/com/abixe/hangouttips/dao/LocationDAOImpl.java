@@ -1,3 +1,8 @@
+/*
+ * LocationDAOImpl.java
+ * Create Date: Aug 24, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.dao;
 
 import javax.persistence.NoResultException;
@@ -12,6 +17,11 @@ import org.springframework.lang.Nullable;
 import com.abixe.hangouttips.model.Location;
 import com.abixe.hangouttips.model.Coordinate;
 
+/**
+ * This class implements the {@link LocationDAO} interface and uses {@link Session} to get {@link Location}
+ * instances from the database.
+ * @author kjaron83
+ */
 public class LocationDAOImpl implements LocationDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(LocationDAOImpl.class);

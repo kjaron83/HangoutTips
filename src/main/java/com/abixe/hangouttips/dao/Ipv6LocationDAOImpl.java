@@ -1,3 +1,8 @@
+/*
+ * Ipv6LocationDAOImpl.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.dao;
 
 import java.math.BigDecimal;
@@ -13,6 +18,11 @@ import org.springframework.lang.Nullable;
 
 import com.abixe.hangouttips.model.Ipv6Location;
 
+/**
+ * This class implements the {@link Ipv6LocationDAO} interface and uses {@link Session} to get {@link Ipv6Location}
+ * instances from the database.
+ * @author kjaron83
+ */
 public class Ipv6LocationDAOImpl implements Ipv6LocationDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(Ipv6LocationDAOImpl.class);

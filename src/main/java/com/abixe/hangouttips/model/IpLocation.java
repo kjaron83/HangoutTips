@@ -1,7 +1,17 @@
+/*
+ * IpLocation.java
+ * Create Date: Aug 11, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.model;
 
 import org.springframework.lang.Nullable;
 
+/**
+ * This interface represents an <a href="https://lite.ip2location.com/ip2location-lite">IP2Location LITE entity</a>,
+ * stored in a database.
+ * @author kjaron83
+ */
 public interface IpLocation extends Coordinate {
 
     @Nullable

@@ -1,3 +1,8 @@
+/*
+ * Location.java
+ * Create Date: Aug 24, 2019
+ * Initial-Author: Janos Aron Kiss
+ */
 package com.abixe.hangouttips.model;
 
 import java.util.Date;
@@ -21,6 +26,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
+/**
+ * This class represents a Location, stored in a database.
+ * @author kjaron83
+ */
 @Entity
 @Table(name = "location")
 public class Location implements Coordinate {
@@ -30,9 +39,18 @@ public class Location implements Coordinate {
     private Double longitude;
     private String countryName;
     private String cityName;
+    /**
+     * An unique path value which can be used as a part of an URL.
+     */
     private String path;
+    /**
+     * The date when the nearby {@link #places} were updated in the data source.
+     */
     private Date updated;
 
+    /**
+     * A set of the nearby places.
+     */
     private Set<Place> places = new HashSet<>();
 
     @Id
@@ -86,26 +104,41 @@ public class Location implements Coordinate {
         this.cityName = cityName;
     }
 
+    /**
+     * @see #path
+     */
     @Column(name = "path")
     @Nullable
     public String getPath() {
         return path;
     }
 
+    /**
+     * @see #path
+     */
     public void setPath(@Nullable String path) {
         this.path = path;
     }
 
+    /**
+     * @see #updated
+     */
     @Column
     @Nullable
     public Date getUpdated() {
         return updated;
     }
 
+    /**
+     * @see #updated
+     */
     public void setUpdated(@Nullable Date updated) {
         this.updated = updated;
     }
 
+    /**
+     * @see #places
+     */
     @JoinTable(name = "location_place_connection", joinColumns = {
             @JoinColumn(name = "locationID") }, inverseJoinColumns = { @JoinColumn(name = "placeID") })
     @ManyToMany(cascade = { CascadeType.ALL }, fetch = FetchType.EAGER)
@@ -114,6 +147,9 @@ public class Location implements Coordinate {
         return places;
     }
 
+    /**
+     * @see #places
+     */
     public void setPlaces(@NonNull Set<Place> places) {
         this.places = places;
     }
@@ -123,14 +159,14 @@ public class Location implements Coordinate {
     public String toString() {
         return "[" + getId() + "] " + getLatitude() + ":" + getLongitude();
     }
-    
+
     @Override
     public boolean equals(@Nullable Object obj) {
         if ( !( obj instanceof Location ) )
             return false;
         if ( obj == this )
-            return true;        
-        
+            return true;
+
         Location other = (Location) obj;
         return new EqualsBuilder()
                 .append(id, other.id)
