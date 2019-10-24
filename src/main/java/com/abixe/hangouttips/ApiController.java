@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.lang.NonNull;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -73,7 +72,7 @@ public class ApiController {
      * Tests if the location can be found by the current IP address, and returns some info about the location.
      */
     @GetMapping(value = "/test")
-    public String pullIpLocationInfo(Model model, HttpServletRequest request) {
+    public String pullIpLocationInfo(HttpServletRequest request) {
         String ip = request.getRemoteAddr();
         IpLocation ipLocation = ipLocationService.getLocation(ip);
 
@@ -85,7 +84,6 @@ public class ApiController {
             info.put("places", location.getPlaces().size());
             info.put("expired", placeApiService.isExpired(location));
         }
-        model.addAttribute("info", info);
 
         return json(info);
     }
