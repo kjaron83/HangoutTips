@@ -31,13 +31,18 @@ public interface Coordinate {
         if ( coordinate == this )
             return true;
 
-        Double latitude = getLatitude();
-        Double longitude = getLongitude();
+        Double thisLatitude = getLatitude();
+        Double thislongitude = getLongitude();
 
-        return latitude != null
-                && longitude != null
-                && latitude.equals(coordinate.getLatitude())
-                && longitude.equals(coordinate.getLongitude());
+        Double coordinateLatitude = coordinate.getLatitude();
+        Double coordinatelongitude = coordinate.getLongitude();
+
+        if ( thisLatitude == null &&  coordinateLatitude == null &&
+                thislongitude == null && coordinatelongitude == null )
+            return true;
+
+        return thisLatitude != null && thisLatitude.equals(coordinateLatitude)
+                && thislongitude != null && thislongitude.equals(coordinatelongitude);
     }
 
 }
