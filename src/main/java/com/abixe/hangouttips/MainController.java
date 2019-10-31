@@ -8,6 +8,7 @@ package com.abixe.hangouttips;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -103,6 +104,23 @@ public class MainController extends DefaultController {
             placeApiService.update(location);
 
         model.addAttribute("info", info);
+
+        return "index";
+    }
+
+    /**
+     * Ensure the content the location list.
+     */
+    @GetMapping(value = "/locations")
+    public String getLocations(Model model) {
+        model.addAttribute("content", "@locations");
+        model.addAttribute("root", getAbsoluteUrl(null));
+
+        model.addAttribute("title", "Hangout Tips - Previously visited locations");
+
+        List<Location> locations = locationService.list();
+        Collections.sort(locations, Location.ALPHABETICAL_COMPARATOR);
+        model.addAttribute("locations", locations);
 
         return "index";
     }

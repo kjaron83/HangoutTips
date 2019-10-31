@@ -20,10 +20,11 @@
                          <div class="row no-gutters">
                             <ul class="links">
                                 <li><a href="/">Home</a></li>
+                                <li><a href="/locations/">Locations</a></li>
                                 <li><a href="https://github.com/kjaron83/HangoutTips" target="_blank">GitHub</a></li>
                                 <li><a href="/privacy-policy/">Privacy Policy</a></li>
                             </ul>
-                            
+
                         </div>
                     </div>
                     <div class="col-lg-4 col-md-12 mt-lg-0 mt-4 col-sm-12 footer-grid_section_1its" data-aos="fade-left">
@@ -32,7 +33,7 @@
                         </div>
                         <div class="footer-text">
                             <p>&copy; 2019 All Rights Reserved.</p>
-                            <p>The cover photo was made by <a href="https://unsplash.com/@danielcgold?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText" rel="nofollow">Dan Gold</a>.</p>
+                            <p>The cover photo was made by <a href="https://unsplash.com/@danielcgold?utm_source=unsplash&amp;utm_medium=referral&amp;utm_content=creditCopyText" rel="nofollow">Dan Gold</a>.</p>
                         </div>
                     </div>
                 </div>
