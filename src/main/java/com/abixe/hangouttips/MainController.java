@@ -89,6 +89,8 @@ public class MainController extends DefaultController {
         if ( location == null )
             return redirect(null);
 
+        model.addAttribute("title", "Hangout Tips nearby " + location.getCityName() + " (" + location.getCountryName() + ")");
+
         HashMap<String, Object> info = new HashMap<>();
 
         info.put("location", location.getPath());
@@ -111,6 +113,7 @@ public class MainController extends DefaultController {
     @GetMapping(value = "/privacy-policy")
     public String getPolicyContent(Model model) {
         model.addAttribute("content", "@policy");
+        model.addAttribute("title", "Hangout Tips - Privacy policy");
         return "index";
     }
 
