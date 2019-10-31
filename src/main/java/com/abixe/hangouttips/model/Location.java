@@ -5,6 +5,7 @@
  */
 package com.abixe.hangouttips.model;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,6 +34,8 @@ import org.springframework.lang.Nullable;
 @Entity
 @Table(name = "location")
 public class Location implements Coordinate {
+
+    public static final Comparator<Location> ALPHABETICAL_COMPARATOR = new AlphabeticalComparator();
 
     private long id;
     private Double latitude;
@@ -190,6 +193,20 @@ public class Location implements Coordinate {
                 .append(path)
                 .append(updated)
                 .toHashCode();
+    }
+
+    private static class AlphabeticalComparator implements Comparator<Location> {
+
+        @Override
+        public int compare(@NonNull Location o1, @NonNull Location o2) {
+            int result = o1.getCountryName().compareTo(o2.getCountryName());
+            if ( result == 0 )
+                result = o1.getCityName().compareTo(o2.getCityName());
+            if ( result == 0 )
+                result = Long.compare(o1.getId(), o2.getId());
+            return result;
+        }
+
     }
 
 }
