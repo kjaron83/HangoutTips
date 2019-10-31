@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="${empty description ? 'Are you searching for a good place to hang out with friends?' : description}">
     <meta name="author" content="János Áron Kiss">
-    
-	<meta property="og:image" content="https://hangout.tips/resources/img/banner.jpg" />    
+
+    <meta property="og:image" content="https://hangout.tips/resources/img/banner.jpg" />
 
     <title>${empty title ? 'Hangout Tips' : title}</title>
     <!-- Bootstrap core CSS -->
@@ -20,12 +20,11 @@
 
     <!-- Custom styles for this template -->
     <link href="/resources/css/style.css" rel="stylesheet">
-    
+
     <script type="text/javascript" src="/resources/js/script.js"></script>
-    
+
     <!-- Bootstrap core JavaScript -->
     <script src="/resources/vendor/jquery/jquery.min.js"></script>
-    <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>    
+    <script src="/resources/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   </head>
-  
