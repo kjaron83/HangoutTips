@@ -5,6 +5,8 @@
  */
 package com.abixe.hangouttips.service;
 
+import java.util.List;
+
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 import org.springframework.transaction.annotation.Transactional;
@@ -100,6 +102,13 @@ public class LocationServiceImpl implements LocationService {
     @Override
     public void remove(@NonNull Location location) {
         locationDAO.remove(location);
+    }
+
+    @NonNull
+    @Override
+    @Transactional
+    public List<Location> list() {
+        return locationDAO.list();
     }
 
 }

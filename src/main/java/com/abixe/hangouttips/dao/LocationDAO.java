@@ -5,6 +5,8 @@
  */
 package com.abixe.hangouttips.dao;
 
+import java.util.List;
+
 import org.springframework.lang.NonNull;
 import org.springframework.lang.Nullable;
 
@@ -49,5 +51,11 @@ public interface LocationDAO {
      * Removes the specified {@link Location} from the data source.
      */
     public void remove(@NonNull Location location);
+
+    /**
+     * Returns a list of every {@link Location} from the data source.
+     */
+    @NonNull
+    public List<Location> list();
 
 }

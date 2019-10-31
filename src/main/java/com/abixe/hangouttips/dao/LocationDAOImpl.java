@@ -5,6 +5,8 @@
  */
 package com.abixe.hangouttips.dao;
 
+import java.util.List;
+
 import javax.persistence.NoResultException;
 
 import org.hibernate.Session;
@@ -110,6 +112,16 @@ public class LocationDAOImpl implements LocationDAO {
         Session session = sessionFactory.getCurrentSession();
         session.delete(location);
         logger.info("Location deleted successfully. Details: " + location);
+    }
+
+    @NonNull
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Location> list() {
+        Session session = this.sessionFactory.openSession();
+        List<Location> list = session.createQuery("from Location").list();
+        session.close();
+        return list;
     }
 
 }
