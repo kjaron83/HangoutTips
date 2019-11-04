@@ -125,6 +125,12 @@ public class PlaceApiServiceImpl implements PlaceApiService {
     @Value("${place.photo.maxwidht}")
     private int placePhotoMaxwidth;
 
+    /**
+     * Updating period of a place photo in milliseconds.
+     */
+    @Value("${place.photo.update}")
+    private long placePhotoUpdate;
+
     private GeoApiContext context;
 
     private GeoApiContext getContext() {
@@ -321,6 +327,9 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             if ( reference.equals(place.getPhotoReference()) )
                 return;
 
+            if ( !isPhotoExpired(place) )
+                return;
+
             String oldPhoto = place.getPhoto();
             if ( oldPhoto != null ) {
                 logger.info("Removing old photo: " + oldPhoto + " " + place.getPhotoReference());
@@ -335,6 +344,26 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             ImageResult image = downloadPhoto(reference);
             place.setPhotoReference(reference);
             place.setPhoto(savePhoto(reference, image));
+            place.setPhotoUpdated(new Date());
+        }
+
+        private boolean isPhotoExpired(@NonNull Place place) {
+            String photo = place.getPhoto();
+            if ( photo == null )
+                return true;
+
+            Date updated = place.getPhotoUpdated();
+            if ( updated == null )
+                return true;
+
+            long now = new Date().getTime();
+            boolean expired = updated.getTime() + placePhotoUpdate < now;
+
+            if ( expired )
+                logger.info("Place photo [" + place.getId() + " " + photo + "] is expired. " + updated.getTime()
+                        + " + " + placePhotoUpdate + " < " + now);
+
+            return expired;
         }
 
         private ImageResult downloadPhoto(@NonNull String reference) {
