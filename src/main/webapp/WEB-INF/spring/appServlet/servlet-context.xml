@@ -35,6 +35,18 @@
         <beans:property name="url" value="${db.connectionString}" />
         <beans:property name="username" value="${db.username}" />
         <beans:property name="password" value="${db.password}" />
+        <beans:property name="initialSize" value="${db.initialSize}" />
+        <beans:property name="maxActive" value="${db.maxActive}" />
+        <beans:property name="maxIdle" value="${db.maxIdle}" />
+        <beans:property name="minIdle" value="${db.minIdle}" />
+        <beans:property name="maxWait" value="${db.maxWait}" />
+        <beans:property name="minEvictableIdleTimeMillis" value="${db.minEvictableIdleTimeMillis}" />
+        <beans:property name="timeBetweenEvictionRunsMillis" value="${db.timeBetweenEvictionRunsMillis}" />
+        <beans:property name="validationQuery" value="${db.validationQuery}" />
+        <beans:property name="testOnBorrow" value="true" />
+        <beans:property name="removeAbandoned" value="true" />
+        <beans:property name="removeAbandonedTimeout" value="60" />
+        <beans:property name="logAbandoned" value="true" />
     </beans:bean>
 
     <!-- Hibernate 5 SessionFactory Bean definition -->
@@ -51,8 +63,9 @@
         </beans:property>
         <beans:property name="hibernateProperties">
             <beans:props>
-                <beans:prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</beans:prop>
-                <beans:prop key="hibernate.show_sql">true</beans:prop>
+                <beans:prop key="hibernate.dialect">${hibernate.dialect}</beans:prop>
+                <beans:prop key="hibernate.batch_size">${hibernate.batchSize}</beans:prop>
+                <beans:prop key="hibernate.show_sql">${hibernate.showSql}</beans:prop>
             </beans:props>
         </beans:property>
     </beans:bean>
