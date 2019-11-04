@@ -61,6 +61,10 @@ public class Place {
      */
     private String photo;
     /**
+     * The date when the photo was downloaded and updated in the data source.
+     */
+    private Date photoUpdated;
+    /**
      * The date when the details of the place were updated in the data source.
      */
     private Date updated;
@@ -187,6 +191,22 @@ public class Place {
      */
     public void setPhoto(@Nullable String photo) {
         this.photo = photo;
+    }
+
+    /**
+     * @see #photoUpdated
+     */
+    @Column(name = "photo_updated")
+    @Nullable
+    public Date getPhotoUpdated() {
+        return photoUpdated;
+    }
+
+    /**
+     * @see #photoUpdated
+     */
+    public void setPhotoUpdated(@Nullable Date photoUpdated) {
+        this.photoUpdated = photoUpdated;
     }
 
     /**

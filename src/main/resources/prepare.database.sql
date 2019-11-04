@@ -73,6 +73,7 @@ CREATE TABLE `place` (
   `map_url` varchar(255) DEFAULT NULL,
   `photo_reference` varchar(255) DEFAULT NULL,
   `photo` varchar(255) DEFAULT NULL,
+  `photo_updated` datetime DEFAULT NULL,
   `updated` datetime DEFAULT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
