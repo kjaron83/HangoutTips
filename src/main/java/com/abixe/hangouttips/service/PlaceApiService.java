@@ -18,6 +18,16 @@ import com.abixe.hangouttips.model.Place;
 public interface PlaceApiService {
 
     /**
+     * Returns whether the updating process is enabled for public use.
+     */
+    public boolean isUpdateEnabled();
+
+    /**
+     * Returns whether the testing of the updating process is enabled.
+     */
+    public boolean isTestEnabled();
+
+    /**
      * Updates the set of the nearby {@link Place}s of the specified {@link Location}, and the details of the
      * {@link Place}s as well.
      */

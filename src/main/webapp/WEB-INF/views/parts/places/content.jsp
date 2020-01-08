@@ -3,6 +3,15 @@
         <div class="container pt-lg-3 pb-md-5">
             <a name="list"></a>
             <h3 class="tittle  text-center my-lg-5 my-3">Our Tips</h3>
+            <c:if test="${!info.update}">
+                <div class="feature-grids row mt-3 mb-lg-5 mb-3 mt-lg-5 text-center">
+                    <div class="col-lg-12" data-aos="fade-up">
+                        <div class="bottom-gd px-3">
+                            <p>Currently, the updating process of the places is disabled. You can see the previously found places on this page.</p>
+                        </div>
+                    </div>
+                </div>
+            </c:if>
             <div class="row pb-lg-5 mt-3 mt-lg-5">
                 <div class="card-columns">
                 <c:forEach items="${info.places}" var="place">

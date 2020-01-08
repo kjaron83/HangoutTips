@@ -58,11 +58,17 @@ public class PlaceApiServiceImpl implements PlaceApiService {
         this.placeDAO = placeDAO;
     }
 
+    @Value("${update.enabled}")
+    private boolean updateEnabled;
+
+    @Value("${update.test.enabled}")
+    private boolean testEnabled;
+
     /**
      * To use the Google Places API you must have an API key. For more information about the API key, see the
      * <a href="https://developers.google.com/places/web-service/get-api-key">API key overview</a>.
      */
-    @Value("${google.apiKey}")
+    @Value("${update.google.apiKey}")
     private String apiKey;
 
     /**
@@ -139,6 +145,16 @@ public class PlaceApiServiceImpl implements PlaceApiService {
             context = new GeoApiContext.Builder().apiKey(apiKey).build();
         }
         return context;
+    }
+
+    @Override
+    public boolean isUpdateEnabled() {
+        return updateEnabled;
+    }
+
+    @Override
+    public boolean isTestEnabled() {
+        return testEnabled;
     }
 
     @Async

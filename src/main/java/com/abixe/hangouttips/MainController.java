@@ -66,12 +66,14 @@ public class MainController extends DefaultController {
         IpLocation ipLocation = ipLocationService.getLocation(ip);
 
         HashMap<String, Object> info = new HashMap<>();
+        boolean update = placeApiService.isUpdateEnabled();
+        info.put("updateEnabled", update);
         info.put("ip", ip);
         if ( ipLocation != null ) {
             Location location = locationService.get(ipLocation);
             info.put("location", location.getPath());
 
-            if ( placeApiService.isExpired(location) )
+            if ( update && placeApiService.isExpired(location) )
                 placeApiService.update(location);
         }
         model.addAttribute("info", info);
@@ -93,14 +95,15 @@ public class MainController extends DefaultController {
         model.addAttribute("title", "Hangout Tips nearby " + location.getCityName() + " (" + location.getCountryName() + ")");
 
         HashMap<String, Object> info = new HashMap<>();
-
+        boolean update = placeApiService.isUpdateEnabled();
+        info.put("updateEnabled", update);
         info.put("location", location.getPath());
 
         ArrayList<Place> places = new ArrayList<>(location.getPlaces());
         Collections.sort(places, Place.RATING_COMPARATOR);
         info.put("places", places);
 
-        if ( placeApiService.isExpired(location) )
+        if ( update && placeApiService.isExpired(location) )
             placeApiService.update(location);
 
         model.addAttribute("info", info);

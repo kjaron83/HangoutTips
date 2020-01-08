@@ -93,6 +93,12 @@ public class ApiController {
      */
     @GetMapping(value = "/{country}/{city}/update", produces = "application/json")
     public String pullLocationUpdate(@PathVariable String country, @PathVariable String city) {
+        if ( !placeApiService.isTestEnabled() ) {
+            Map<String, Object> result = createResults(false);
+            result.put("info", "Testing of the updating process is not enabled.");
+            return json(result);
+        }
+
         Location location = locationService.get(country + "/" + city);
         if ( location != null )
             placeApiService.update(location);
